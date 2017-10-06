@@ -1,0 +1,132 @@
+\subsubsection{Emulation} \label{sec:emulation}
+%
+%
+%\begin{figure}[tb]
+%\begin{minipage}{0.3\linewidth}
+%\centering
+%\scriptsize
+% \begin{tabular}{|l|} \hline
+%\textbf{Example Code:} \\
+%$\mathtt{ mov \quad eax, 8}$ \\
+%$\mathtt{ mov \quad ebx, 8} $\\
+%$\mathtt{ sub \quad  eax,ebx}$ \\
+%\hline
+%\end{tabular}
+%\end{minipage}
+%~
+%\begin{minipage}{0.3\linewidth}
+%\centering
+%\scriptsize
+%\begin{tabular}{|l|} \hline
+%\textbf{Pre-state:} \\
+%$\mathtt{  eax: 0x0 }$\\
+%$\mathtt{  ebx: 0x0 }$\\
+%$\mathtt{  eip: 0x0 }$\\
+%$\mathtt{ zf: 0 }$ \\
+%$\mathtt{ memory: flat} $\\
+%\hline
+%\end{tabular}
+%%\\[0.2cm] (b) candidate DFA $\mathcal{C}_2$
+%\end{minipage}
+%~
+%\begin{minipage}{0.3\linewidth}
+%\centering
+%\scriptsize
+%\begin{tabular}{|l|} \hline
+%\textbf{Post-state:} \\
+%$\mathtt{ eax: 0x0 }$ \\
+%$\mathtt{ ebx: 0x8 }$ \\
+%$\mathtt{ eip: 0xc }$\\
+%$\mathtt{ zf: 1 }$\\
+%$\mathtt{ memory: unchanged }$\\
+%\hline
+%\end{tabular}
+%%\\[0.2cm] (b) candidate DFA $\mathcal{C}_2$
+%\end{minipage}
+%\vspace{-2mm}
+%\caption{The BB-structure of a function, and its structural features
+%}
+%\label{fig:learnedDFA}
+%\end{figure}
+
+
+
+\begin{figure}[tb]
+\begin{minipage}{0.5\linewidth}
+\centering
+\scriptsize
+\begin{tabular}{|l|} \hline
+\textbf{X86:} \\
+$\mathtt{mov\quad eax, 0xa}$\\
+\textcolor{blue}{$\mathtt{mov\quad[0x1100], eax}$}\\
+$\mathtt{mov\quad ebx, 0xa}$\\
+$\mathtt{sub\quad eax, ebx}$ \\
+\hline
+\end{tabular}
+\\[0.2cm] (a) X86 code segment 1 \label{fig:emulation:a}
+\end{minipage}
+~
+\begin{minipage}{0.5\linewidth}
+\centering
+\scriptsize
+\begin{tabular}{|l|} \hline
+\textbf{X86:} \\
+$\mathtt{mov\quad eax, 0xa}$\\
+\textcolor{blue}{$\mathtt{push\quad 0x4}$}\\
+\textcolor{blue}{$\mathtt{push\quad eax}$}\\
+\textcolor{blue}{$\mathtt{push\quad 0x1100}$}\\
+\textcolor{blue}{$\mathtt{call\quad memcpy}$}\\
+$\mathtt{mov\quad ebx, 0xa}$ \\
+$\mathtt{sub\quad eax, ebx}$ \\
+\hline
+\end{tabular}
+\label{fig:emulation:b}
+\\[0.1cm] (b) X86 code segment 2
+\end{minipage}
+\begin{minipage}{0.5\linewidth}
+\centering
+\scriptsize
+\begin{tabular}{|l|} \hline
+\textbf{ARM:} \\
+$\mathtt{mov\quad r0, \#0xa}$\\
+$\mathtt{mov\quad r3, \#0x1100}$\\
+$\mathtt{str\quad  r0,[r3]}$\\
+$\mathtt{mov\quad r1, \#0xa}$ \\
+$\mathtt{subs\quad r0,r0,r1}$ \\
+\hline
+\end{tabular}
+\\[0.2cm] (c)  ARM code segment \label{fig:emulation:c}
+\end{minipage}
+~
+\begin{minipage}{0.5\linewidth}
+\centering
+\scriptsize
+ \vspace{2mm}
+ \begin{tabular}{l}
+
+ \textbf{Output:} \\
+overflow : 0 \\
+carry : 0 for (a)(b), 1 for (c)\\
+zero : 1\\
+negative : 0\\
+memory at 0x1100: 0x000a\\
+\end{tabular}
+\\[0.15cm] (d)  output of these segments \label{fig:emulation:d}
+\end{minipage}
+\vspace{-2mm}
+\caption{An example of using emulation to extract low-level features}
+\label{fig:emulation}
+\end{figure}
+
+In~\tool, for a code segment or a $k$-length partial trace (i.e., $k$-tracelet), the low-level semantic features (e.g., the symbolic expression in \S~\ref{sec:category:lowSeFea}) are extracted and constraint solving is applied to resolve these symbolic expressions. Executing code segments in \textsc{BLEX}~\cite{egele2014blanket} or solving them by SMT solver in~\tool  lead to an intractable problem --- the scalability problem especially when the code segment is long and the  symbolic analysis becomes complicated.
+
+Emulation is faster than actual execution and much faster than constraint solving. In~\toolNew, emulation  is adopted for extraction of feature values introduced in \S~\ref{sec:category:lowSeFea:io} and \S~\ref{sec:category:lowSeFea:freq}. Given two code segments, we assume they have the same initial memory status (i.e., the same address and layout). \xyx{For code matching on the same architecture, we check the values of registers, flags after emulation and the addresses of read/write operation on stack and heap during emulation; while for code matching across architectures, we check the values of flags after emulation and the addresses of read/write operation on stack and heap during emulation. For example, for three code segments in Fig.~\ref{fig:emulation}, with the same initial memory status, they have the same resulting memory status --- the overflow flag (V-flag) is 0, the zero flag (Z-flag) is 1, the negative flag (N-flag) is 0, and the carry flag (C-flag) is consistent (0 for x86 in~Fig.~\ref{fig:emulation}(a) and (b) has the same meaning as 1 for Arm in Fig.~\ref{fig:emulation}(c)). Being code matching on the same architecture, code segments in~Fig.~\ref{fig:emulation}(a) and (b) even have the same resulting values for registers $\mathtt{eax}$ and $\mathtt{ebx}$. In addition, we also use the low-level features on values read from or written to the program heap/stack in this case.  For example, $\mathtt{0x1100}$ is the intermediate value written to the stack.}
+
+\xyx{In emulation part, the major technique challenges are 1). handling the function call and 2). choosing input or initial value for registers, flags and memory addresses.} Note that emulation does not conflict with selective inlining.
+The emulation step is after the selective inlining step, and hence many important function calls (e.g., system calls and library calls) have been inlined. For function calls that are not selected for inlining, we adopt two different strategies for different scenarios:
+     \begin{enumerate}[itemsep=0.15mm]
+     \item In matching binary code from the same code base, we adopt the strategy of inlining-none --- that is none of these called functions will be inlined. The rationale is twofold: functions that are not inlined by selective inlining are less likely representing the semantics of the program (more potential of being utility functions); since signature function and target functions both have the called function (due to the same code base), for the same input, ignoring the called function should still produce the same results for the semantic clones.
+     \item In matching binary code from different code bases, we adopt the strategy of inlining-all, namely the strategy that all the called function will be inlined to emulate the execution of instructions. The reason is that binary segments compiled from different code bases usually call different system calls or library calls --- ignoring them will bring errors and lead to different results for the same input, even if the two binary segments are semantic clones.
+     \end{enumerate}
+
+\xyx{Regarding the emulation input, we adopt the strategy of using three totally different input values. For two binary functions to be matched via emulation, we feed it with three types of input: all values with $\mathtt{0x0000}$, all values with $\mathtt{0x1111}$, and all random values. If two binary segments are matched according to low-level semantic features for all three types of input, we considered they are matched.}

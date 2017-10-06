@@ -1,0 +1,245 @@
+%aum gaanathipathaya namaha
+%sri rama jeyam
+
+\def\WithComments{}
+
+%\documentclass{sig-alternate-05-2015}
+%\documentclass{fse-xie}
+\documentclass{fse-xie}
+\pdfpagewidth=8.5in
+\pdfpageheight=11in
+
+\usepackage{booktabs}
+\usepackage[table,xcdraw]{xcolor}
+
+
+%\documentclass[conference]{IEEEtran}
+%\documentclass[conference]{IEEEtran}
+\usepackage{etex}
+\usepackage{picture}
+%\usepackage{usenix,epsfig,endnotes}
+\usepackage{multirow}
+\usepackage{seqsplit}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{graphicx}
+%\usepackage{mathabx}
+\usepackage{caption}
+\usepackage{microtype}
+%\usepackage{subfigure}
+%\usepackage[lined,boxed,commentsnumbered]{algorithm2e}
+%\usepackage{algorithm}
+%\usepackage{algorithmic}
+\usepackage[ruled,vlined,linesnumbered]{algorithm2e}
+\newcommand\mycommfont[1]{\fontsize{7}{7}\selectfont\rmfamily\textcolor{gray}{#1}}
+\SetCommentSty{mycommfont}
+%\usepackage{algpseudocode}
+%\usepackage{algpseudocode}
+\usepackage{setspace}
+\usepackage{breakurl}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{pifont}
+\usepackage{hyphenat}
+\usepackage{xspace}
+\usepackage{setspace}
+\let\labelindent\relax
+\usepackage{enumitem}
+\usepackage{times}
+%\usepackage[pass]{geometry}
+%\usepackage[left=2.5cm, top=1.5cm, right=1.5cm, bottom=2cm, includehead]{geometry}
+\usepackage{soul}
+\usepackage{color}
+\usepackage{balance}
+\usepackage{tikz}
+%\usepackage{tikz}
+\usepackage{threeparttable}
+\usepackage{mathtools}
+\usepackage{tabularx}
+\usepackage{scrextend}
+\usepackage{varwidth}
+\usepackage{natbib}
+\usetikzlibrary{calc,decorations.pathmorphing,shapes}
+\usepackage[colorlinks=true,citecolor=blue,linkcolor=blue,urlcolor=blue]{hyperref}
+
+\usepackage{verbatim}
+\usepackage{caption}
+%\usepackage[active,tightpage]{preview}
+%\PreviewEnvironment{tikzpicture}
+%\setlength\PreviewBorder{5pt}
+\usetikzlibrary{arrows}
+\newcommand{\powerset}[1]{\mathbb{P}(#1)}
+\ifdefined \WithComments
+	\newcommand{\xyx}[1]{\textcolor[rgb]{1,0.0,0.0}{#1}}
+    \newcommand{\wjj}[1]{\textcolor{blue}{\textbf{ToChange: #1}}}
+    \newcommand{\ly}[1]{\textcolor{red}{\textbf{#1}}}
+\else
+	\newcommand{\xyx}[1]{}
+    \newcommand{\wjj}[1]{}
+    \newcommand{\ly}[1]{}
+\fi
+
+\ifdefined \dependency
+	\newcommand{\idiomDep}[1]{\textcolor{orange}{#1}}
+
+\else
+	\newcommand{\idiomDep}[1]{}
+\fi
+
+\setlength{\textfloatsep}{0pt}
+
+\newtheorem{example}{Example}
+
+% correct bad hyphenation here
+%\hyphenation{op-tical net-works semi-conduc-tor}
+
+%\newcommand{\tool}{\textsc{SMAT}\xspace}
+%\newcommand{\toolFull}{\textbf{S}emantic \textbf{M}odelling of \textbf{A}ndroid a\textbf{T}tack\xspace}
+%\newcommand{\website}{http://pat.sce.ntu.edu.sg/smat\xspace}
+%\newcommand{\doubt}{\textsc{\color{red}}\xspace}
+
+%~~~~~~~~~~~~~~ algorithm start ~~~~~~~~~~~~~~~~~~~~~
+\newlength\marincrease
+
+\makeatletter
+\newenvironment{MyAlgo}[2][htbp]
+  {\renewcommand{\@algocf@start}{%
+    \setlength\marincrease{#2}
+  \@algoskip%
+  \begin{lrbox}{\algocf@algobox}%
+  \begin{minipage}{\dimexpr\textwidth+2\marincrease\relax}
+  \setlength{\algowidth}{\hsize}%
+  \vbox\bgroup% save all the algo in a box
+  \hbox to\algowidth\bgroup\hbox to \algomargin{\hfill}\vtop\bgroup%
+  \ifthenelse{\boolean{algocf@slide}}{\parskip 0.5ex\color{black}}{}%
+  % initialization
+  \addtolength{\hsize}{-1.5\algomargin}%
+  \let\@mathsemicolon=\;\def\;{\ifmmode\@mathsemicolon\else\@endalgoln\fi}%
+  \raggedright\AlFnt{}%
+  \ifthenelse{\boolean{algocf@slide}}{\IncMargin{\skipalgocfslide}}{}%
+  \@algoinsideskip%
+%   \let\@emathdisplay=\]\def\]{\algocf@endline\@emathdisplay\nl}%
+  }%
+\renewcommand{\@algocf@finish}{%
+  \@algoinsideskip%
+  \egroup%end of vtop which contain all the text
+  \hfill\egroup%end of hbox wich contains [margin][vtop]
+  \ifthenelse{\boolean{algocf@slide}}{\DecMargin{\skipalgocfslide}}{}%
+  %
+  \egroup%end of main vbox
+  \end{minipage}
+  \end{lrbox}%
+  \makebox[\linewidth][c]{\algocf@makethealgo}% print the algo
+  \@algoskip%
+  % restore dimension and macros
+  \setlength{\hsize}{\algowidth}%
+  \lineskip\normallineskip\setlength{\skiptotal}{\@defaultskiptotal}%
+  \let\;=\@mathsemicolon%
+  \let\]=\@emathdisplay%
+}%
+  \begin{algorithm}[#1]}
+  {\end{algorithm}}
+\makeatother
+
+%\usepackage[tight,footnotesize]{subfigure}
+\usepackage{subcaption}
+%\usepackage{relsize}
+%\usepackage{subfig}
+%~~~~~~~~~~~~~~~~~~~~~~~ algorithm end ~~~~~~~~~~~~~~~~~~~~
+
+\newcommand{\tool}{\textsc{\small BinGo}\xspace}
+
+\makeatletter
+\def\@begintheorem#1#2{\trivlist
+  \item[\hskip \labelsep{ #1\ #2.}]}%\bfseries
+\makeatother
+
+\newtheorem{defn}{Definition}
+\newtheorem{assu}{Assumption}
+\newtheorem{exmp}{Example}
+\newtheorem{pattern}{Rule}
+
+\clubpenalty = 10000
+\widowpenalty = 10000
+\displaywidowpenalty = 10000
+
+\makeatletter
+\def\@copyrightspace{\relax}
+\makeatother
+
+
+
+\begin{document}
+%sri rama jeyam
+%aum ganaathipathaye namaha
+%
+% paper title
+% can use linebreaks \\ within to get better formatting as desired
+\title{BinGo: Cross-Architecture Cross-OS Binary Search}
+
+%\author{
+%\alignauthor Mahinthan Chandramohan, Yang Liu, Tan Hee Beng Kuan, Zhengzi Xu  and  Yinxing Xue \\
+%\affaddr{`}\\
+%\affaddr{Nanyang Technological University, Singapore}\\
+%}
+\numberofauthors{1}
+\author{
+\alignauthor Mahinthan Chandramohan\textsuperscript{{\normalsize \dag}}, Yinxing Xue\textsuperscript{{\normalsize \dag}}, Zhengzi Xu\textsuperscript{{\normalsize \dag}}, Yang Liu\textsuperscript{{\normalsize \dag}}, Chia Yuan Choo\textsuperscript{{\normalsize *}}, and  Tan Hee Beng Kuan\textsuperscript{{\normalsize \dag}} \\
+\affaddr{\textsuperscript{{\normalsize \dag}}Nanyang Technological University, Singapore}\\
+\affaddr{\textsuperscript{{\normalsize *}}DSO National Laboratories, Singapore}\\
+}
+
+% make the title area
+\maketitle
+
+%\vspace{-30mm}
+\input{command}
+
+\begin{abstract}
+\input{srj-abstract}
+\end{abstract}
+
+%\IEEEpeerreviewmaketitle
+\input{srj-introduction}
+\input{srj-problem}
+\input{srj-overview}
+\input{srj-selective_inlining}
+\input{srj-prefiltering}
+\input{srj-function_matching}
+\input{srj-experiment}
+%
+%%\input{table}
+%%\input{srj-discussion}
+\input{srj-related-work}
+%\newpage
+%\input{idioms}
+%\input{relate}
+%\input{motivating}
+%\input{background}
+%\input{overview}
+%\input{approach}
+%\input{detection}
+%\input{eval}
+%\input{discuss}
+ \input{concl}
+
+%\newpage
+
+%\bibliographystyle{abbrv}
+%\begin{spacing}{0.9}
+%{\scriptsize
+%\bibliography{srj-bibliography}
+%}
+%\end{spacing}
+\newpage
+\balance
+\bibliographystyle{abbrv}
+\bibliography{srj-bibliography}
+
+%\input{appendix}
+
+%\input{appendix}
+% that's all folks
+\end{document}
+
+

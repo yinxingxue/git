@@ -1,0 +1,77 @@
+digraph  {
+	graph [Creator="igraph version 0.7.1 Wed May  6 20:38:30 2015",
+		Version=1
+	];
+	0	 [code="push ebp;mov ebp,esp;and esp,0FFFFFFF0h;sub esp,430h;mov eax,[ebp+arg_4];mov [es\
+p+1Ch],eax;mov eax,large gs:14h;mov [esp+42Ch],eax;xor eax,eax;mov dword ptr [es\
+p+24h],5;mov edx,[esp+24h];mov eax,[esp+24h];cmp edx,eax;",
+		endEA=134513912,
+		inNodes="<>",
+		jumpCodeOriginal="jnz loc_8048573;",
+		jumpCodeRelative="jnz roffset_0xffffff85L;",
+		outNodes="<1,2>",
+		startEA=134513860];
+	1	 [code="mov eax,offset format;mov [esp],eax;call _printf;mov eax,[esp+1Ch];add eax,4;mov\
+ eax,[eax];mov [esp+4],eax;lea eax,[esp+2Ch];mov [esp],eax;call _strcpy;mov dwor\
+d ptr [esp],offset s;call _puts;mov eax,offset aS;lea edx,[esp+2Ch];mov [esp+4],\
+edx;mov [esp],eax;call _printf;mov edx,[esp+24h];mov eax,[esp+24h];cmp edx,eax;",
+		endEA=134513995,
+		inNodes="<0>",
+		jumpCodeOriginal="jnz loc_80485BF;",
+		jumpCodeRelative="jnz roffset_0xffffff8cL;",
+		outNodes="<3,4>",
+		startEA=134513914];
+	0 -> 1;
+	2	 [code="mov eax,[esp+24h];test eax,eax;setz al;movzx eax,al;mov [esp+24h],eax;test eax,e\
+ax;",
+		endEA=134514053,
+		inNodes="<0>",
+		jumpCodeOriginal="jz loc_80485BF;",
+		jumpCodeRelative="jz roffset_0xffffffc6L;",
+		outNodes="<5>",
+		startEA=134514035];
+	0 -> 2;
+	3	 [code="mov dword ptr [esp],offset aThisIsHowNotTo;call _puts;lea eax,[esp+2Ch];mov [esp\
+],eax;call _printf;mov dword ptr [esp],0Ah;call _putchar;",
+		endEA=134514033,
+		inNodes="<1>",
+		jumpCodeOriginal="jmp loc_80485BF;",
+		jumpCodeRelative="jmp roffset_0xffffffb2L;",
+		outNodes="<>",
+		startEA=134513997];
+	1 -> 3;
+	4	 [code="mov edx,[esp+42Ch];xor edx,large gs:14h;",
+		endEA=134514125,
+		inNodes="<1>",
+		jumpCodeOriginal="jz locret_80485D4;",
+		jumpCodeRelative="jz roffset_0xfffffff9L;",
+		outNodes="<6,7>",
+		startEA=134514111];
+	1 -> 4;
+	5	 [code="mov eax,offset aItIsNotExecute;mov [esp],eax;call _printf;mov eax,offset aThisIs\
+DummyStr;mov [esp+2Bh],al;mov dword ptr [esp],offset s;call _puts;movsx edx,byte\
+ ptr [esp+2Bh];mov eax,offset aS;mov [esp+4],edx;mov [esp],eax;call _printf;",
+		endEA=134514106,
+		inNodes="<2>",
+		jumpCodeOriginal=None,
+		jumpCodeRelative=None,
+		outNodes="<>",
+		startEA=134514055];
+	2 -> 5;
+	6	 [code="call ___stack_chk_fail;",
+		endEA=134514127,
+		inNodes="<4>",
+		jumpCodeOriginal=None,
+		jumpCodeRelative=None,
+		outNodes="<>",
+		startEA=134514127];
+	4 -> 6;
+	7	 [code="leave;retn;",
+		endEA=134514133,
+		inNodes="<4>",
+		jumpCodeOriginal=None,
+		jumpCodeRelative=None,
+		outNodes="<>",
+		startEA=134514132];
+	4 -> 7;
+}

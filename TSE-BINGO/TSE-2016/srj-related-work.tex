@@ -1,0 +1,88 @@
+%aum ganathipathaye namaha
+%sri rama jeyam
+\section{Related Work}\label{sec:related}
+Our work is relevant to the following three lines of works.
+%\subsection{Code Search based on Similarity}
+%The first line of research is about code search based on similarity. Most of existing code search studies rely on the similarity check of source code or binary code.
+
+%\noindent{\emph{\textbf{Source code similarity analysis}}}
+%Early in 2002,
+
+%\textsc{\small CCFinder} \cite{DBLP:journals/tse/KamiyaKI02} was proposed to detect source code clones based on a token-by-token comparison. %, in which each token is an identifier or key word of the input source text. Rather than use string or token for similarity check,
+%\textsc{\small DECKARD} \cite{DBLP:conf/icse/JiangMSG07} builds the AST and applies local sensitive hashes to search for the similar subtrees of source code. Besides, PDG based clone detection~\cite{DBLP:conf/icse/GabelJS08} can tolerate some syntactic modifications or small gaps of additional statements, but the detection might be slow.
+
+%saebjornsen2009detecting
+
+
+
+
+%In addition to $n$-gram, graphlet and CFG, tracelet \cite{DBLP:conf/pldi/DavidY14} is presented to capture semantic similarity of execution sequences and facilitate searching for similar functions.
+
+%\subsection{Binary Code Differencing}
+
+%The second line of studies relevant to \textsc{\small BinGo} is semantic equivalence check of binary code. Instead of measuring a similarity degree, checking equivalence of two portions of binary instructions focuses on identification of the invariants as well as the differences among them.
+
+\subsection{Code Search Using Low-level Program Semantics}
+Treating the program as a black box, the idea of checking input-output (I/O) values and intermediate values is applied to identify the
+semantic clones or behavioral clones, even without the usage or the analysis of code. This idea is first applied to detect semantic clones in source code.
+As early as in 2009, Jiang \emph{et al.} \cite{DBLP:conf/issta/JiangS09}   %--- how to automatically find semantically-equivalent code fragments from a large source codebase. \cite{DBLP:conf/issta/JiangS09}
+proposed to cluster the code fragments according to the I/O samples of random testing.
+In 2011, to detect semantic clones, Kim \emph{et al.} \cite{DBLP:conf/icse/KimJKY11} proposed the tool \textsc{MeCC}, which models the abstract memory state and matches similar functions by comparing I/O values and guard conditions. Modelling abstract state in \textsc{MeCC} is, to some extent, similar to that we do in \tool for low-level semantics extraction, but \textsc{MeCC} works on C/C++ code and our approach works on binary code.
+
+The similar idea is applied for binary code search. In recent years, Schkufza \emph{et al.} \cite{DBLP:conf/asplos/Schkufza0A13} presented a method to compare x86 loop-free snippets for testing the correctness of binary code transformation (e.g., transforming code compiled by \texttt{llvm -O0}  to code compiled by \texttt{gcc -O3}). Based on I/O values and states of the machine, the equivalence is checked when the execution is complete. %Since approaches based on input-out    put check require dynamic execution on multiple inputs, they are generally less efficient than approaches based on static similarity analysis.
+%Note that intermediate values are not considered in \cite{DBLP:conf/issta/JiangS09}\cite{DBLP:conf/asplos/Schkufza0A13}.
+In addition to I/O values,  intermediate values can be an alternative solution when it is difficult to identify I/O variables in binary code. Zhang \emph{et al.} \cite{DBLP:conf/sigsoft/ZhangG05} proposed to use the local variables and local addresses referenced, which are extracted from dynamic execution traces,  for comparing the binary code of two versions of the program. In \cite{DBLP:conf/icse/JhiWJZLW11}, based on the assumption that some specific intermediate values are inevitable in implementing the same algorithm, Jhi \emph{et al.} \cite{DBLP:conf/icse/JhiWJZLW11} proposed to use value-sequence to serve as the fingerprint for the binary function and compare value-sequence for measuring similarity. According to this assumption of considering immediate values as the \lq\lq signature\rq\rq{} of an algorithm, Zhang \emph{et al.} \cite{DBLP:conf/issta/ZhangJWLZ12} presented a method based on value dependency graph to detect algorithm plagiarism. In recent studies,  \textsc{BLEX} \cite{egele2014blanket} used low-level semantic features such as the values read from or written to stack/heap  and the return value of registers.
+In \cite{luo2014semantics} and \cite{cop-tse}, Luo \emph{et al.} adopted symbolic formulas to represent the I/O relations of blocks and applied longest common subsequence (LCS)
+based fuzzy matching to measure binary code similarity, even when binary code obfuscation is present.
+
+Among the above studies, we use the similar low-level semantic features that are used in  \cite{DBLP:conf/icse/KimJKY11,luo2014semantics,cop-tse} to model the memory states and I/O values in \tool. Different from other studies, we extract these low-level semantics from $k$-traces ($k$-length partial trace). To overcome the drawbacks of low-level semantics in \S~\ref{sec:category:lowSeFea:io}, in \toolNew, we incorporate some low-level semantic features proposed in \textsc{BLEX} \cite{egele2014blanket} (\S~\ref{sec:category:lowSeFea:freq}). Note that all the above studies employ dynamic execution or constraint solving to extract the I/O values, but \toolNew adopts emulation to speed up the extraction.
+%According to this assumption, the studies on plagiarism detection \cite{DBLP:conf/issta/ZhangJWLZ12} and matching execution histories of program \cite{DBLP:conf/sigsoft/ZhangG05} are proposed.
+
+\subsection{Code Search Using High-level Program Semantics}
+In the domain of malware detection and analysis, system call sequences or system call based behavior graph \cite{DBLP:conf/uss/KolbitschCKKZW09} are widely used as the signatures of malware, as the represent the unique high-level semantics of the program --- the functionality the program behaves. Usually, system calls are mapped and categorized into different abstract actions that represent certain behaviors \cite{DBLP:conf/issta/CanaliLBKCK12}. In such a way, similar malware can be detected regardless of architecture and OS differences.
+
+System calls represent program semantics. Similarly, third party library calls can also represent high-level program semantics.  \textsc{\small BLEX} \cite{egele2014blanket} is presented to tolerate the differences in compilation optimization and obfuscation. As mentioned above, \textsc{\small BLEX}  executes functions of the two given binaries with the same inputs and compare the output behaviors. To relax the difference of two binaries, \textsc{\small BLEX} further uses the high-level semantic features from an execution, i.e.,  calls to imported library function via the point
+and system calls made during execution. According to their report, using Library function invocation alone can only gain an accuracy of 17\% in matching, while using system calls alone produces an accuracy of 38\%.
+
+Hence, for achieving a better matching accuracy, using the names of library function invocation and system calls is insufficient.
+Hu \emph{et al.} \cite{DBLP:conf/wcre/HuZLG16} proposed the approach \textsc{MockingBird}, which extracts function signature as a sequence of two dynamic features: Comparison Operand Pairs (COP) and System Call Attributes (SCA). COP refers to the operation result  that directly determines the control flow of the execution, and SCA refers to system call attributes that consist of names and argument values of all system calls invoked in an execution. Besides, to support cross-architecture code matching, \textsc{MockingBird} addresses the diversity issue of instruction sets using VEX-IR.
+  %(e.g., calling imported library functions).
+%However, \textsc{\small BLEX} is for x64 binaries, not for cross-architecture code diff.
+
+In \toolNew, we are not only using attributes of system calls and library function calls, but also incorporating opcode and op types. More than names and attributes of system calls, we also consider tags for common system calls to support cross-OS code matching. The idea of system call tags is inspired by the abstract actions that are used for malware detection \cite{DBLP:conf/issta/CanaliLBKCK12}. Note that  \toolNew adopts no IR.
+
+\subsection{Code Search Using Structural Information}  %Recently, similarity analysis is applied on the binary executables. Considering the textual characteristics of binary instructions,
+CFG and its derived representations are the commonly-used structural information for binary code matching.
+\textsc{\small BinDiff} \cite{DBLP:conf/dimva/Flake04} %, which is a widely used tool for binary diffing,
+builds CFGs of the two binaries and then adopts a heuristic to normalize and match the two CFGs.  Essentially, \textsc{\small BinDiff} resolves the NP-hard graph isomorphism problem (matching CFGs). % Owing to the effective neighborhood-growing algorithm, the matching is quite fast and accurate, especially, when two compared binaries are similar.
+\textsc{\small BinHunt} \cite{DBLP:conf/icics/GaoRS08}, a tool that extends \textsc{\small BinDiff}, is enhanced for binary diff at the two following aspects:  considering matching CFGs as the Maximum Common Induced Subgraph Isomorphism problem, and applying symbolic execution and theorem proving to verify the equivalence of two basic code blocks. %To address the difficulty of   \textsc{\small BinDiff} and \textsc{\small BinHunt} in matching non-subgraphs,
+To address non-subgraph matching of CFGs, \textsc{\small BinSlayer} \cite{DBLP:conf/popl/BourquinKR13} models the CFG matching problem as a bipartite graph matching problem.
+For these tools, compiler optimization options change the structure of CFGs and fail the graph-based matching. Besides, graph-based matching may produce unsymmetrical results.
+
+Witnessing the weakness of graph-based matching, some researchers proposed new derived representation of binary code (e.g., graphlet~\cite{DBLP:conf/raid/KrugelKMRV05}, tracelet~\cite{DBLP:conf/pldi/DavidY14}).   Saebjornsen \emph{et al.}~\cite{saebjornsen2009detecting} proposed a binary code clone detection framework that leverage on normalized syntax (i.e., normalised operands) based function modelling technique.
+Jang \emph{et al.} \cite{DBLP:conf/uss/JangWB13} propose to use $n$-gram models to get the complex lineage for binaries, and normalize the instruction mnemonics. Based on the $n$-gram features, the code search is done via checking symmetric distance. %However, $n$-gram that uses the textual information is not resistant to the code structure change due to architecture, OS, or even compilation options.
+%In security domain,
+ %They randomly choose a starting point in the executable, parse it as code and construct an arbitrary length CFG from there for matching.
+Kr{\"{u}}gel \emph{et al.}~\cite{DBLP:conf/raid/KrugelKMRV05} propose a graphlet-based approach to identify malware, which generates connected  $k$-subgraphs of the CFG and apply graph-coloring to detect common subgraphs between a malware sample and a suspicious one. Tracelet \cite{DBLP:conf/pldi/DavidY14} is presented to capture syntax similarity of execution sequences and facilitate searching for similar functions. However, these tools relying on structural information may fail during cross-architecture and cross-OS analysis.
+
+In \toolNew, the structural information of CFG is represented as a new form, i.e., 3D-CFG \cite{DBLP:conf/icse/ChenLZ14}. To the best knowledge of ours, 3D-CFG is previously used for byte-code clone detection, and our study is the first attempt to apply this idea for binary code matching. Besides, to avoid the noise due to the differences in BB-structure of CFGs, before extracting low-level semantic features, we build function model of $k$-tracelet, and extract low-level semantic features from them. Hence, in \toolNew, the idea of using $k$-tracelet \cite{DBLP:conf/pldi/DavidY14} is adopted to mitigate the impact of differences in BB-structure.
+%\subsection{Bug Detection based on Binary Analysis}
+%Our work is also related to detection of vulnerabilities or exploitable bugs. Early in 1990, blackbox fuzzing had been proposed to provoke program crashes \cite{DBLP:journals/cacm/MillerFS90}. Besides fuzzing, program analysis techniques, such as static/dynamic taint and symbolic execution, are widely use for the purpose of finding vulnerabilities. Newsome and Song propose to use dynamic taint analysis to identify the string format vulnerability  as well as other exploits at runtime~\cite{DBLP:conf/ndss/NewsomeS05}.
+%Livshits and Lam also adopt a static points-to analysis to detect vulnerabilities in Java bytecode \cite{DBLP:conf/uss/LivshitsL05}.In \textsc{\small MayHem} \cite{DBLP:conf/sp/ChaARB12}, Cha \emph{et al.} present a hybrid symbolic execution engine for combining on-line and off-line (concolic) execution to gain the advantage of both techniques. With the results of symbolic execution, \textsc{\small MayHem} proposes index-based memory modeling to reason about symbolic memory at the binary level.
+
+%The aforementioned approaches based on
+\subsection{Security Application of Binary Code Search}
+In cyber security domain, binary code search tool is a powerful weapon for securing binary executables (e.g., malware detection and vulnerability discovery). In many scenarios, static analysis tools are preferred for binary code auditing. Dynamic analysis
+%like fuzzing or \textsc{\small MayHem}
+faces challenges from two aspects: the difficulty in setting up the execution environment, and the scalability issue that prevents large-scale detection.
+
+Pinpointed by Zaddach \emph{et al.} \cite{DBLP:conf/ndss/ZaddachBFB14}, these dynamic approaches are far from practical application onto highly-customized hardware like mobile or embedded devices. Thus it is difficult for these approaches to conduct cross-architecture bug detection.
+To address this issue, Pewny \emph{et al.} \cite{DBLP:conf/sp/PewnyGGRH15} and \textsc{\small discovRE}~\cite{sebastian2016discovre} propose a static analysis technique
+%that need not handle the peculiarities of the actual hardware platform except its CPU architecture. The goal of their work
+with the aim to detect vulnerabilities inside multiple versions of the same program compiled for different architectures. Thus, their approach is good for finding clones of the same program due to architecture or compilation differences, not suitable for finding semantic binary clones among different applications.
+ \cite{DBLP:conf/dimva/BruschiMM06} aims to detect infected virus from executables via a static CFG matching approach.
+In addition, \cite{DBLP:conf/esorics/RosenblumZM11} and \cite{DBLP:conf/paste/RosenblumMZ10} also adopt CFG in the recovery of the information of compilers and even authors.
+%On the other hand, these tools can find previously-unseen bugs, while our approach is focused on re-finding bugs in other binary software. We thus consider these works as complementary.
+
+In this study, we make as signature the vulnerable binary functions from open source projects, and search them in the closed-source commercial executable (e.g., Adobe PDF Reader).
+The same or similar vulnerability can be discovered, if an open source software bug is forked into the commercial solution.

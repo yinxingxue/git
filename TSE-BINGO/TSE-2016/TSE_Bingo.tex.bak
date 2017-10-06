@@ -1,0 +1,406 @@
+
+%% bare_jrnl_compsoc.tex
+%% V1.4b
+%% 2015/08/26
+%% by Michael Shell
+%% See:
+%% http://www.michaelshell.org/
+%% for current contact information.
+%%
+%% This is a skeleton file demonstrating the use of IEEEtran.cls
+%% (requires IEEEtran.cls version 1.8b or later) with an IEEE
+%% Computer Society journal paper.
+%%
+%% Support sites:
+%% http://www.michaelshell.org/tex/ieeetran/
+%% http://www.ctan.org/pkg/ieeetran
+%% and
+%% http://www.ieee.org/
+
+%%*************************************************************************
+%% Legal Notice:
+%% This code is offered as-is without any warranty either expressed or
+%% implied; without even the implied warranty of MERCHANTABILITY or
+%% FITNESS FOR A PARTICULAR PURPOSE!
+%% User assumes all risk.
+%% In no event shall the IEEE or any contributor to this code be liable for
+%% any damages or losses, including, but not limited to, incidental,
+%% consequential, or any other damages, resulting from the use or misuse
+%% of any information contained here.
+%%
+%% All comments are the opinions of their respective authors and are not
+%% necessarily endorsed by the IEEE.
+%%
+%% This work is distributed under the LaTeX Project Public License (LPPL)
+%% ( http://www.latex-project.org/ ) version 1.3, and may be freely used,
+%% distributed and modified. A copy of the LPPL, version 1.3, is included
+%% in the base LaTeX documentation of all distributions of LaTeX released
+%% 2003/12/01 or later.
+%% Retain all contribution notices and credits.
+%% ** Modified files should be clearly indicated as such, including  **
+%% ** renaming them and changing author support contact information. **
+%%*************************************************************************
+
+
+% *** Authors should verify (and, if needed, correct) their LaTeX system  ***
+% *** with the testflow diagnostic prior to trusting their LaTeX platform ***
+% *** with production work. The IEEE's font choices and paper sizes can   ***
+% *** trigger bugs that do not appear when using other class files.       ***                          ***
+% The testflow support page is at:
+% http://www.michaelshell.org/tex/testflow/
+
+
+\documentclass[10pt,journal,compsoc]{IEEEtran}
+%
+% If IEEEtran.cls has not been installed into the LaTeX system files,
+% manually specify the path to it like:
+% \documentclass[10pt,journal,compsoc]{../sty/IEEEtran}
+
+
+
+\usepackage{booktabs}
+\usepackage[table,xcdraw]{xcolor}
+
+
+\usepackage{etex}
+\usepackage{picture}
+\usepackage{multirow}
+\usepackage{seqsplit}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{microtype}
+\usepackage[ruled,vlined,linesnumbered]{algorithm2e}
+\newcommand\mycommfont[1]{\fontsize{7}{7}\selectfont\rmfamily\textcolor{gray}{#1}}
+\SetCommentSty{mycommfont}
+\usepackage{setspace}
+\usepackage{breakurl}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{pifont}
+\usepackage{hyphenat}
+\usepackage{xspace}
+\usepackage{setspace}
+\let\labelindent\relax
+\usepackage{enumitem}
+\usepackage{times}
+\usepackage{soul}
+\usepackage{color}
+\usepackage{balance}
+\usepackage{tikz}
+\usepackage{threeparttable}
+\usepackage{mathtools}
+\usepackage{tabularx}
+\usepackage{scrextend}
+\usepackage{varwidth}
+\usetikzlibrary{calc,decorations.pathmorphing,shapes}
+\usepackage[colorlinks=true,citecolor=blue,linkcolor=blue,urlcolor=blue]{hyperref}
+
+\usepackage{verbatim}
+\usepackage{caption}
+\usetikzlibrary{arrows}
+\newcommand{\powerset}[1]{\mathbb{P}(#1)}
+\usepackage{subfigure}
+\usepackage{listings}
+
+\lstdefinelanguage
+   [x64]{Assembler}     % add a "x64" dialect of Assembler
+   [x86masm]{Assembler} % based on the "x86masm" dialect
+   % with these extra keywords:
+   {morekeywords={CDQE,CQO,CMPSQ,CMPXCHG16B,JRCXZ,LODSQ,MOVSXD, %
+                  POPFQ,PUSHFQ,SCASQ,STOSQ,IRETQ,RDTSCP,SWAPGS, %
+                  rax,rdx,rcx,rbx,rsi,rdi,rsp,rbp, %
+                  r8,r8d,r8w,r8b,r9,r9d,r9w,r9b}} % etc.
+
+\lstset{language=[x64]Assembler}
+
+
+\ifdefined \dependency
+	\newcommand{\idiomDep}[1]{\textcolor{orange}{#1}}
+
+\else
+	\newcommand{\idiomDep}[1]{}
+\fi
+
+\setlength{\textfloatsep}{0pt}
+
+\newtheorem{example}{Example}
+
+\newlength\marincrease
+
+\makeatletter
+\newenvironment{MyAlgo}[2][htbp]
+  {\renewcommand{\@algocf@start}{%
+    \setlength\marincrease{#2}
+  \@algoskip%
+  \begin{lrbox}{\algocf@algobox}%
+  \begin{minipage}{\dimexpr\textwidth+2\marincrease\relax}
+  \setlength{\algowidth}{\hsize}%
+  \vbox\bgroup% save all the algo in a box
+  \hbox to\algowidth\bgroup\hbox to \algomargin{\hfill}\vtop\bgroup%
+  \ifthenelse{\boolean{algocf@slide}}{\parskip 0.5ex\color{black}}{}%
+  % initialization
+  \addtolength{\hsize}{-1.5\algomargin}%
+  \let\@mathsemicolon=\;\def\;{\ifmmode\@mathsemicolon\else\@endalgoln\fi}%
+  \raggedright\AlFnt{}%
+  \ifthenelse{\boolean{algocf@slide}}{\IncMargin{\skipalgocfslide}}{}%
+  \@algoinsideskip%
+%   \let\@emathdisplay=\]\def\]{\algocf@endline\@emathdisplay\nl}%
+  }%
+\renewcommand{\@algocf@finish}{%
+  \@algoinsideskip%
+  \egroup%end of vtop which contain all the text
+  \hfill\egroup%end of hbox wich contains [margin][vtop]
+  \ifthenelse{\boolean{algocf@slide}}{\DecMargin{\skipalgocfslide}}{}%
+  %
+  \egroup%end of main vbox
+  \end{minipage}
+  \end{lrbox}%
+  \makebox[\linewidth][c]{\algocf@makethealgo}% print the algo
+  \@algoskip%
+  % restore dimension and macros
+  \setlength{\hsize}{\algowidth}%
+  \lineskip\normallineskip\setlength{\skiptotal}{\@defaultskiptotal}%
+  \let\;=\@mathsemicolon%
+  \let\]=\@emathdisplay%
+}%
+  \begin{algorithm}[#1]}
+  {\end{algorithm}}
+\makeatother
+
+%\usepackage{subcaption}
+
+\newcommand{\tool}{\textsc{BinGo}\xspace}
+\newcommand{\toolNew}{\textsc{BinGo-E}\xspace}
+\makeatletter
+\def\@begintheorem#1#2{\trivlist
+  \item[\hskip \labelsep{ #1\ #2.}]}%\bfseries
+\makeatother
+
+\newtheorem{defn}{Definition}
+\newtheorem{assu}{Assumption}
+\newtheorem{exmp}{Example}
+\newtheorem{pattern}{Rule}
+
+\clubpenalty = 10000
+\widowpenalty = 10000
+\displaywidowpenalty = 10000
+
+
+
+\begin{document}
+%
+% paper title
+% Titles are generally capitalized except for words such as a, an, and, as,
+% at, but, by, for, in, nor, of, on, or, the, to and up, which are usually
+% not capitalized unless they are the first or last word of the title.
+% Linebreaks \\ can be used within to get better formatting as desired.
+% Do not put math or special symbols in the title.
+\title{Accurate and Scalable Cross-Architecture Cross-OS Binary Code Search with Emulation}
+%
+%
+% author names and IEEE memberships
+% note positions of commas and nonbreaking spaces ( ~ ) LaTeX will not break
+% a structure at a ~ so this keeps an author's name from being broken across
+% two lines.
+% use \thanks{} to gain access to the first footnote area
+% a separate \thanks must be used for each paragraph as LaTeX2e's \thanks
+% was not built to handle multiple paragraphs
+%
+%
+%\IEEEcompsocitemizethanks is a special \thanks that produces the bulleted
+% lists the Computer Society journals use for "first footnote" author
+% affiliations. Use \IEEEcompsocthanksitem which works much like \item
+% for each affiliation group. When not in compsoc mode,
+% \IEEEcompsocitemizethanks becomes like \thanks and
+% \IEEEcompsocthanksitem becomes a line break with idention. This
+% facilitates dual compilation, although admittedly the differences in the
+% desired content of \author between the different types of papers makes a
+% one-size-fits-all approach a daunting prospect. For instance, compsoc
+% journal papers have the author affiliations above the "Manuscript
+% received ..."  text while in non-compsoc journals this is reversed. Sigh.
+
+\author{Yinxing Xue,~\IEEEmembership{Non-member,}
+       Zhengzi Xu,~\IEEEmembership{Non-member,}
+       Mahinthan Chandramohan,~\IEEEmembership{Non-member,}
+       Yang Liu,~\IEEEmembership{Member,~IEEE,}
+       and Chia Yuan Cho,~\IEEEmembership{Non-member,}
+       %  and~Tan Hee Beng Kuan,~\IEEEmembership{Member,~IEEE}% <-this % stops a space
+ \IEEEcompsocitemizethanks{\IEEEcompsocthanksitem  Y. Xue and M. Chandramohanare the co-first author of the paper. Y. Xue is with Nanyang Technological University, Singapore, 637553. E-mail:{}.  M. Chandramohanare  is with Scantist Ltd,  E-mail:{}.
+ \IEEEcompsocthanksitem Z. Xu, Y. Liu and H.B.K. Tan are with School of Computer Science and Engineering, Nanyang Technological University, Singapore, 639798. E-mail:{}
+ \IEEEcompsocthanksitem C.Y. Cho is with DSO National Laboratories, Singapore, 118230. E-mail:{} }
+\thanks{Manuscript received September XX, 2016; revised XXXX XX, 2016.}}
+
+% note the % following the last \IEEEmembership and also \thanks -
+% these prevent an unwanted space from occurring between the last author name
+% and the end of the author line. i.e., if you had this:
+%
+% \author{....lastname \thanks{...} \thanks{...} }
+%                     ^------------^------------^----Do not want these spaces!
+%
+% a space would be appended to the last name and could cause every name on that
+% line to be shifted left slightly. This is one of those "LaTeX things". For
+% instance, "\textbf{A} \textbf{B}" will typeset as "A B" not "AB". To get
+% "AB" then you have to do: "\textbf{A}\textbf{B}"
+% \thanks is no different in this regard, so shield the last } of each \thanks
+% that ends a line with a % and do not let a space in before the next \thanks.
+% Spaces after \IEEEmembership other than the last one are OK (and needed) as
+% you are supposed to have spaces between the names. For what it is worth,
+% this is a minor point as most people would not even notice if the said evil
+% space somehow managed to creep in.
+
+% The paper headers
+\markboth{IEEE Transaction on Software Engineering,~Vol.~XX, No.~X, September~2016}%
+{Shell \MakeLowercase{\textit{et al.}}: Bare Demo of IEEEtran.cls for Computer Society Journals}
+% The only time the second header will appear is for the odd numbered pages
+% after the title page when using the twoside option.
+%
+% *** Note that you probably will NOT want to include the author's ***
+% *** name in the headers of peer review papers.                   ***
+% You can use \ifCLASSOPTIONpeerreview for conditional compilation here if
+% you desire.
+
+
+
+% The publisher's ID mark at the bottom of the page is less important with
+% Computer Society journal papers as those publications place the marks
+% outside of the main text columns and, therefore, unlike regular IEEE
+% journals, the available text space is not reduced by their presence.
+% If you want to put a publisher's ID mark on the page you can do it like
+% this:
+%\IEEEpubid{0000--0000/00\$00.00~\copyright~2015 IEEE}
+% or like this to get the Computer Society new two part style.
+%\IEEEpubid{\makebox[\columnwidth]{\hfill 0000--0000/00/\$00.00~\copyright~2015 IEEE}%
+%\hspace{\columnsep}\makebox[\columnwidth]{Published by the IEEE Computer Society\hfill}}
+% Remember, if you use this you must call \IEEEpubidadjcol in the second
+% column for its text to clear the IEEEpubid mark (Computer Society jorunal
+% papers don't need this extra clearance.)
+
+
+
+% use for special paper notices
+%\IEEEspecialpapernotice{(Invited Paper)}
+
+
+
+% for Computer Society papers, we must declare the abstract and index terms
+% PRIOR to the title within the \IEEEtitleabstractindextext IEEEtran
+% command as these need to go into the title area created by \maketitle.
+% As a general rule, do not put math, special symbols or citations
+% in the abstract or keywords.
+
+\input{command}
+\IEEEtitleabstractindextext{%
+\begin{abstract}
+Different from source code clone detection, clone detection (similar code search) in binary executables faces big challenges due to the gigantic differences in syntax and structure of  binary code that result  from different configurations of compilers, architectures and OSs. Existing studies have proposed different categories of features for detecting binary code clones, including CFG structures, n-gram in CFG, input/output values, etc. In our previous study and the tool \tool, to mitigate the huge gaps in CFG structures due to different compilation scenarios, we propose a selective inlining technique to capture the complete function semantics by inlining relevant library and user-defined functions. However, only features of input/output values are considered in \tool. In this study, we propose to incorporate features from different categories (e.g., structural features and high-level semantic features) for accuracy improvement and emulation for efficiency improvement. We empirically compare our tool, \toolNew, with the pervious tool \tool~and the available state-of-the-art tools of binary code search in terms of search accuracy and performance. \xyx{Results shows that \toolNew achieves significantly better accuracies than \tool for cross-architecture matching, cross-OS matching, cross-compiler matching and intra-compiler matching. Additionally, in the new task of matching binaries of forked projects, \toolNew also exhibits better accuracy than the existing benchmark tool. Meanwhile, \toolNew takes less time than \tool during the process of matching.}
+%However, developing an accurate and effective binary code search tool is challenging due to the gigantic syntax and structural differences in binaries resulted from different compilers, architectures and OSs.
+%In this paper, we propose \tool --- a scalable and robust binary search engine supporting various architectures and OSs.
+%The key contribution is a selective inlining technique to capture the complete function semantics by inlining relevant library and user-defined functions.
+%In addition, architecture and OS neutral function filtering is proposed to dramatically reduce the irrelevant target functions.
+%Besides, we introduce length variant partial traces to model binary functions in a program structure agnostic fashion.
+%The experimental results show that \tool can find semantic similar functions across architecture and OS boundaries, even with the presence of program structure distortion, in a scalable manner. Using \tool, we also discovered a zero-day vulnerability in Adobe PDF Reader, a COTS binary.
+
+\end{abstract}
+
+% Note that keywords are not normally used for peerreview papers.
+\begin{IEEEkeywords}
+Binary Code Searching, Vulnerability Matching, Emulation
+\end{IEEEkeywords}}
+
+
+% make the title area
+\maketitle
+
+
+% To allow for easy dual compilation without having to reenter the
+% abstract/keywords data, the \IEEEtitleabstractindextext text will
+% not be used in maketitle, but will appear (i.e., to be "transported")
+% here as \IEEEdisplaynontitleabstractindextext when the compsoc
+% or transmag modes are not selected <OR> if conference mode is selected
+% - because all conference papers position the abstract like regular
+% papers do.
+\IEEEdisplaynontitleabstractindextext
+% \IEEEdisplaynontitleabstractindextext has no effect when using
+% compsoc or transmag under a non-conference mode.
+
+
+
+% For peer review papers, you can put extra information on the cover
+% page as needed:
+% \ifCLASSOPTIONpeerreview
+% \begin{center} \bfseries EDICS Category: 3-BBND \end{center}
+% \fi
+%
+% For peerreview papers, this IEEEtran command inserts a page break and
+% creates the second title. It will be ignored for other modes.
+\IEEEpeerreviewmaketitle
+
+
+
+%\IEEEraisesectionheading{\section{Introduction}\label{sec:introduction}}
+% Computer Society journal (but not conference!) papers do something unusual
+% with the very first section heading (almost always called "Introduction").
+% They place it ABOVE the main text! IEEEtran.cls does not automatically do
+% this for you, but you can achieve this effect with the provided
+% \IEEEraisesectionheading{} command. Note the need to keep any \label that
+% is to refer to the section immediately after \section in the above as
+% \IEEEraisesectionheading puts \section within a raised box.
+
+
+
+
+% The very first letter is a 2 line initial drop letter followed
+% by the rest of the first word in caps (small caps for compsoc).
+%
+% form to use if the first word consists of a single letter:
+% \IEEEPARstart{A}{demo} file is ....
+%
+% form to use if you need the single drop letter followed by
+% normal text (unknown if ever used by the IEEE):
+% \IEEEPARstart{A}{}demo file is ....
+%
+% Some journals put the first two words in caps:
+% \IEEEPARstart{T}{his demo} file is ....
+%
+% Here we have the typical use of a "T" for an initial drop letter
+% and "HIS" in caps to complete the first word.
+%\IEEEPARstart{T}{his} demo file is intended to serve as a ``starter file''
+%for IEEE Computer Society journal papers produced under \LaTeX\ using
+%IEEEtran.cls version 1.8b and later.
+% You must have at least 2 lines in the paragraph with the drop letter
+% (should never be an issue)
+%\hfill mds
+%\hfill August 26, 2015
+
+
+\input{srj-introduction}
+\input{srj-problem}
+\input{srj-overview}
+\input{srj-featureCate}
+\input{srj-selective_inlining}
+\input{srj-function_matching}
+
+\input{srj-prefiltering}
+
+\input{srj-experiment}
+\vspace{-3mm}
+\input{srj-related-work}
+\vspace{-1mm}
+\input{concl}
+\vspace{-1mm}
+\section{Acknowledgements}
+This research is supported in part by the National Research Foundation, Singapore under its National Cybersecurity R$\&$D Program (Award No. NRF2014NCR-NCR001-30).
+
+
+\balance
+\bibliographystyle{ieeetran}
+\bibliography{srj-bibliography}
+
+
+
+
+% that's all folks
+\end{document}
+
+

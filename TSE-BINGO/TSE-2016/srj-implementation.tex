@@ -1,0 +1,4 @@
+%aum gaanathipathaye namaha
+%srj
+\section{Implementation}\label{sec:implementation}
+The semantic feature extraction engine in \tool uses REIL (Reverse Engineering Intermediate Language) \cite{dullien2009reil} intermediate language to perform the program analysis, where we map the low-level assembly instruction to its corresponding REIL instruction. REIL is architecture and OS independent, hence, we are able to do cross-architecture and cross OS analysis. Further, we leverage on IDA Pro, the de-facto disassembly engine, to extract abstract semantic features from each function. In addition, partial traces are generated using the Tracy plugin. In \tool, we limit partial trace length to 4 (i.e., $k=4$), that is, from each function, we extract partial traces at lengths 1 to 4. Hence, for each function, \tool is able to construct 15 ($2^4-1$) functions models. All the experiments were conducted on a machine with Intel Core i7-4702MQ @ 2.2GHz with 32GB DDR3-RAM.

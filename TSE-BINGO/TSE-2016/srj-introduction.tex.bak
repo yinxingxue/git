@@ -1,0 +1,200 @@
+%aum ganathipathaye namaha
+%sri rama jeyam
+\section{Introduction}\label{sec:info}
+
+%\ly{we should write it more general first for SE communities.}
+
+\IEEEPARstart{W}{ith} the prosperity of open source projects and open software under GPL, new software (even commercial software) can reuse the code of the existing related projects. However, extensive reuse of existing code leads to some legal and security issues. According to the report on \url{`gpl-violations.org'} \cite{gpl_vio}, over 200 cases of GNU public license violations  are identified in software products. Among them, \textsc{VMware} is the well-known software vendor that is facing the lawsuit regarding the GPL violation \cite{vm_news}. Meanwhile, code reuse brings risks that a vulnerability disclosed in reused projects can spread into the
+new commercial products as undisclosed vulnerability. For example, in Dec. 2014,  vulnerabilities in the implementation of the network time protocol (NTP) \emph{ntpd} affected the products that import it, such as Linux distribution, Cisco's 5900x and Apple's OSX switches. %In addition, cyber attackers may reuse the existing malicious code in creating malware.
+
+%\mahin{GPL license violation is a good application of this work. at the moment, we don't have any experiment result to substantiate that. Do you know any known cases so that we can do the experiment? On the other hand, if we don't do the exp. is it still okay to mention that GPL violation motivated us to do this work?}
+
+When the source code of an executable or a library   is not available, binary code search can facilitate the tasks of GPL violation detection~\cite{DBLP:conf/msr/HemelKVD11}, software plagiarism detection~\cite{luo2014semantics,cop-tse}, reverse engineering~\cite{caballero2009binary}, semantic recovery~\cite{kim2014reuse}, malware detection~\cite{ming2015memoized} and buggy (vulnerable) code identification~\cite{DBLP:conf/sp/PewnyGGRH15,DBLP:conf/pldi/DavidY14,vuddy} in various software components.
+However, binary code search is a fundamental problem that is much more challenging than the problem of source code search, due to the syntax gaps caused by the platform, the architecture and the compilation options.
+
+%We can even search for zero-day vulnerabilities in proprietary binary by matching the known vulnerability from open source software.
+%, in various software components for which the source code is not available (e.g., legacy application), have rise the demanded for scalable binary code searching techniques.
+%recommend similar code solutions, identify binary semantics, and also reveal zero-day vulnerabilities. %Especially in software testing and security domain, vulnerabilities in software are deep hidden in inscrutable binary code, leaving a legacy ticking-time bomb in a software system.
+%Especially, among the various vulnerability detection techniques~\cite{DBLP:journals/csur/ShahriarZ12}, binary code search is a fast yet accurate solution that preludes a further manual check of security experts.
+
+In source code search, the similarity of two code snippets is measured based on some representations of source code, e.g., approaches based on token~\cite{DBLP:journals/tse/KamiyaKI02}, abstract syntax tree (AST) \cite{DBLP:conf/icse/JiangMSG07}, control flow graph (CFG) \cite{DBLP:conf/qsic/ChanC14},  or program dependency graph (PDG)~\cite{DBLP:conf/icse/GabelJS08}. All these representations capture the syntactic or structural information of the program, and yield accurate results for source code search. However, these approaches fail when applied to binary code search. The reason is that the same source code may be compiled into the assembly code with different structures due to the choice of architecture, platform or compilation options. Thus, the syntactic or structural information is not sufficient for accurate binary code search.
+
+%As summarized in our previous paper~\cite{bingo},
+We propose three desirable characteristics for an accurate yet scalable cross-architecture and cross-OS binary code search tool.
+%\vspace{-2mm}
+\begin{itemize}%[label=\textbf{P\arabic*.},itemindent=*,itemsep=0mm]
+\itemsep0em
+\item \textbf{P1.} Resilient to the syntactic and structural differences  due to different configurations of compilers, architectures and OSs.
+\item \textbf{P2.} Accurate in capturing the abstract and complete function semantics, balancing the impact of compiler optimization levels.
+\item \textbf{P3.} Scalable to large size real world binaries, avoiding the overheads of the analysis based on dynamic executions and constraint solving.
+\end{itemize}
+%\vspace{-2mm}
+
+%Recently, various approaches have been proposed to detect the similar binary code by using static or dynamic analysis.
+%To better understand the mainstream binary function matching techniques,
+The existing binary code search approaches adopt two types of analysis: namely, static analysis~\cite{DBLP:conf/pldi/DavidY14,saebjornsen2009detecting,luo2014semantics,DBLP:conf/sp/PewnyGGRH15} and dynamic analysis \cite{DBLP:conf/issta/JiangS09,DBLP:conf/asplos/Schkufza0A13,DBLP:conf/icse/JhiWJZLW11,egele2014blanket}.
+Static approaches  usually  rely on the syntactical and structural information of binaries, especially CFG (i.e., a control flow of basic blocks within a function) to perform the matching. % , and does not capture the true semantics (i.e., complete understanding) of the program under investigation.
+Dynamic approaches often inspect the invariants of input-output or intermediate values of program at runtime to check the equivalence of binary programs. In general, static approaches are good at P3, but suffer from P1 and P2. On the contrary, dynamic methods have merits in P2 and P3, while having drawbacks in P3.
+
+
+%\begin{table*}[]
+%\scriptsize
+% \begin{center} %\vspace{-1mm}
+%\caption{Comparison of existing techniques. Here, \ding{51} or \ding{55} represent whether it supports the corresponding feature or not, respectively. } \label{tab:lit_rev}
+%\begin{tabular}{ | m{1.6cm}| m{1.1cm} | m{1.3cm} | m{1.3cm} | m{1.2cm} | }
+%\hline
+% \multicolumn{1}{|c|}{\textbf{Tool}} & \textbf{Type}  & \textbf{P1 Resilient}  & \textbf{P2 Accurate}  & \textbf{P3 Scalable}  \\ \hline
+%   BLEX~\cite{egele2014blanket} & \multicolumn{1}{c|}{Dynamic} & \multicolumn{1}{c|}{\ding{51}} &  \multicolumn{1}{c|}{\ding{51}} & \multicolumn{1}{c|}{\ding{55}} \\ \hline
+%  Tracy~\cite{DBLP:conf/pldi/DavidY14} & \multicolumn{1}{c|}{Static} & \multicolumn{1}{c|}{\ding{55}} & \multicolumn{1}{c|}{\ding{55}} & \multicolumn{1}{c|}{\ding{51}}  \\ \hline
+%   \textsc{discovRE}~\cite{sebastian2016discovre} & \multicolumn{1}{c|}{Static} & \multicolumn{1}{c|}{\ding{55}} & \multicolumn{1}{c|}{\ding{55}} & \multicolumn{1}{c|}{\ding{51}}  \\ \hline
+%     CoP~\cite{luo2014semantics} & \multicolumn{1}{c|}{Static} & \multicolumn{1}{c|}{\ding{55}} & \multicolumn{1}{c|}{\textcolor{black}{\ding{51}}{\small\textcolor{black}{\kern-0.55em\ding{55}}}} &\multicolumn{1}{c|}{\ding{55}}  \\ \hline
+% Bug search~\cite{DBLP:conf/sp/PewnyGGRH15} & \multicolumn{1}{c|}{Static} & \multicolumn{1}{c|}{\ding{55}} & \multicolumn{1}{c|}{\ding{55}} &\multicolumn{1}{c|}{\ding{55}}  \\ \hline
+%
+%
+% BinGo & \multicolumn{1}{c|}{Static} & \multicolumn{1}{c|}{\ding{51}} &\multicolumn{1}{c|}{\ding{51}} & \multicolumn{1}{c|}{\ding{51}}  \\ \hline
+% BinGo-V & \multicolumn{1}{c|}{Static} & \multicolumn{1}{c|}{\ding{51}} &\multicolumn{1}{c|}{\ding{51}} & \multicolumn{1}{c|}{\ding{51}}  \\ \hline
+%  \end{tabular}
+%  \end{center}
+%  \vspace{-4mm}
+%\end{table*}
+
+
+\begin{table*}[]
+\scriptsize
+ \begin{center} %\vspace{-1mm}
+\caption{Comparison of existing techniques. Here, \ding{51} or \ding{55} represent whether it supports the corresponding feature or not, respectively. } \label{tab:lit_rev}
+    \begin{tabular}{|l|m{1.2cm}||m{1.4cm}|m{1.4cm}|m{1.2cm}|m{1.2cm}||m{1.2cm}|m{1.2cm}|m{1.2cm}|m{1.2cm}|}
+    \hline
+    \textbf{Tool}  & \textbf{Type}  &  \textbf{Low-level semantic fea.} & \textbf{High-level semantic fea.} & \textbf{Structural fea.} & \textbf{Syntactic fea.} & \textbf{Constraint solving}& \textbf{Fast filtering}& \textbf{Selective inlining} & \textbf{Emulation} \\\hline
+    \textsc{BLEX}~\cite{egele2014blanket}  & Dynamic  &  \multicolumn{1}{c|}{\ding{51}}      &   \multicolumn{1}{c|}{\ding{51}}     &   \multicolumn{1}{c|}{\ding{55}}     &     \multicolumn{1}{c||}{\ding{55}}  &  \multicolumn{1}{c|}{\ding{55}}    & \multicolumn{1}{c|}{\ding{55}} & \multicolumn{1}{c|}{\ding{55}}  & \multicolumn{1}{c|}{\ding{55}}  \\\hline
+    \textsc{Tracy}~\cite{DBLP:conf/pldi/DavidY14} & Static &   \multicolumn{1}{c|}{\ding{55}}     & \multicolumn{1}{c|}{\ding{55}}       &   \multicolumn{1}{c|}{\ding{51}}     &   \multicolumn{1}{c||}{\ding{51}}     &  \multicolumn{1}{c|}{\ding{55}}     & \multicolumn{1}{c|}{\ding{55}} &  \multicolumn{1}{c|}{\ding{55}}   & \multicolumn{1}{c|}{\ding{55}} \\\hline
+     \textsc{DiscovRE}~\cite{sebastian2016discovre}  & Static &  \multicolumn{1}{c|}{\ding{55}}      &  \multicolumn{1}{c|}{\ding{55}}      &  \multicolumn{1}{c|}{\ding{55}}      &      \multicolumn{1}{c||}{\ding{55}}  &  \multicolumn{1}{c|}{\ding{55}}    &\multicolumn{1}{c|}{\ding{51}}  &   \multicolumn{1}{c|}{\ding{55}}   &\multicolumn{1}{c|}{\ding{55}}   \\\hline
+     \textsc{CoP}~\cite{luo2014semantics,cop-tse}   & Static &    \multicolumn{1}{c|}{\ding{51}}   &   \multicolumn{1}{c|}{\ding{55}}     &  \multicolumn{1}{c|}{\ding{55}}      &    \multicolumn{1}{c||}{\ding{55}}    &   \multicolumn{1}{c|}{\ding{51}}    & \multicolumn{1}{c|}{\ding{55}} &  \multicolumn{1}{c|}{\ding{55}}   &  \multicolumn{1}{c|}{\ding{55}} \\\hline
+    Bug search~\cite{DBLP:conf/sp/PewnyGGRH15} & Static &   \multicolumn{1}{c|}{\ding{51}}    &   \multicolumn{1}{c|}{\ding{55}}     &  \multicolumn{1}{c|}{\ding{55}}      &      \multicolumn{1}{c||}{\ding{55}}  &  \multicolumn{1}{c|}{\ding{51}}     & \multicolumn{1}{c|}{\ding{55}} &  \multicolumn{1}{c|}{\ding{55}}   & \multicolumn{1}{c|}{\ding{55}}   \\\hline
+     \textsc{Esh}~\cite{DBLP:conf/pldi/DavidPY16} & Static &  \multicolumn{1}{c|}{\ding{55}}      & \multicolumn{1}{c|}{\ding{55}}       &     \multicolumn{1}{c|}{\ding{51}}     &      \multicolumn{1}{c||}{\ding{55}}  & \multicolumn{1}{c|}{\ding{55}}     &\multicolumn{1}{c|}{\ding{55}}  & \multicolumn{1}{c|}{\ding{55}}     & \multicolumn{1}{c|}{\ding{55}}   \\\hline
+    \textsc{\tool} & Static &  \multicolumn{1}{c|}{\ding{51}}      &  \multicolumn{1}{c|}{\ding{55}}      &  \multicolumn{1}{c|}{\ding{55}}      &   \multicolumn{1}{c||}{\ding{55}}     &    \multicolumn{1}{c|}{\ding{51}}  &\multicolumn{1}{c|}{\ding{51}}  &  \multicolumn{1}{c|}{\ding{51}}   & \multicolumn{1}{c|}{\ding{55}}   \\\hline
+     \textsc{\toolNew} & Static &   \multicolumn{1}{c|}{\ding{51}}     &    \multicolumn{1}{c|}{\ding{51}}    &    \multicolumn{1}{c|}{\ding{51}}    &   \multicolumn{1}{c||}{\ding{55}}     &   \multicolumn{1}{c|}{\ding{55}}    & \multicolumn{1}{c|}{\ding{55}} & \multicolumn{1}{c|}{\ding{51}}    & \multicolumn{1}{c|}{\ding{51}}  \\\hline
+    \end{tabular}%
+  \end{center}
+\vspace{-4mm}
+\end{table*}
+
+In Table~\ref{tab:lit_rev}, we list the state-of-the-art binary code search tools in the literature. Among these tools, only \textsc{\small BLEX}~\cite{egele2014blanket} is the dynamic function matching tool that uses seven semantic features generated from running execution. %\textsc{\small BLEX}~\cite{egele2014blanket} could be accurate, but not scalable.
+All the other tools adopt static analysis, and hence suffer from the issues in P1 and P2. \textsc{\small Tracy}~\cite{DBLP:conf/pldi/DavidY14} uses the pure syntax information for function matching, and it uses $k$-tracelet (i.e., basic blocks of length $n$ along the control-flow path), which is architecture- and OS-dependent. \textsc{\small discovRE}~\cite{sebastian2016discovre} proposes to find across-architecture bugs in binaries in a scalable manner, where it uses two filters (numeric and structural) to quickly locate the similar candidates for the target function. \textsc{\small CoP}~\cite{luo2014semantics} is a plagiarism detection tool that adopts the theorem prover to search for semantically equivalent code segments.
+%, hence, not very scalable for real-world binaries \mahin{and does not support cross-architecture and cross-OS analysis}.
+The bug search tool proposed in~\cite{DBLP:conf/sp/PewnyGGRH15} supports cross-architecture analysis  by translating the binary code to an intermediate representation, and solving the resulting assignment formulas of input and output variables.
+\textsc{Esh}~\cite{DBLP:conf/pldi/DavidPY16}, inspired by the idea of similarity by the composition for images, proposes  to  decompose each procedure to small code segments (so called \emph{strands}), semantically compare the strands to identify
+similarity, and lift the results into procedures.
+
+%Since different OSs use different ABI (Application Binary Interface), \cite{DBLP:conf/sp/PewnyGGRH15} has very limited support for cross-OS analysis because of ignoring ABI in the analysis.
+%Since extracting semantic features is quite expensive and there is no pre-filtering process in place to narrow down the search space,  \cite{DBLP:conf/sp/PewnyGGRH15} is not very scalable and in addition, due to incomplete modeling, it captures only the partial semantics of the functions.
+%ABI in the analysis.
+%Further, \textsc{\small CoP} and~\cite{DBLP:conf/sp/PewnyGGRH15} are program structure dependent, where they use pairwise basic-block similarity search as an initial step to identify candidate target functions that are similar to the signature\footnote{\mahin{define signature and target functions}}. This indicates that both \textsc{\small CoP} and~\cite{DBLP:conf/sp/PewnyGGRH15} have an implicit assumption that at least one basic-block is preserved in the signature and target binaries. These assumptions are too restrictive for real-world binaries especially, when the signature and target binaries (or fucntions) do not share the \mahin{same code base}.
+
+  %, which captures the precise semantics of the binary code.
+%As a dynamic analysis tool, \textsc{\small BLEX} %does code search at the function level
+%is not scalable and, due to implementation limitations, does not support cross-architecture and cross-OS analysis.
+
+
+%\begin{table}[]
+%\scriptsize
+%	\begin{center} \vspace{-1mm}
+%\caption{Comparison of existing techniques} \label{tab:lit_rev}
+%\begin{tabular}{ | m{1.6cm} | m{2.2cm} | m{2.1cm} | m{0.9cm} | }
+%\hline
+%	\textbf{Tool}  & \textbf{Program structure neutral (C1)} & \textbf{Capture complete semantics (C2)} & \textbf{Scalable (C3)} \\ \hline
+%	 BLEX~\cite{egele2014blanket} & Yes &  Yes & No \\ \hline
+%	 Tracy~\cite{DBLP:conf/pldi/DavidY14}  & No & No & Yes  \\ \hline
+%     CoP~\cite{luo2014semantics} & No & Limited & No  \\ \hline
+%	Bug search~\cite{DBLP:conf/sp/PewnyGGRH15} & No & No & No  \\ \hline
+%	discovRE~\cite{sebastian2016discovre}& No & No & Yes  \\ \hline
+%	 BinGo & Yes (\S\ref{sec:func_match}) & Yes (\S\ref{sec:inline}) & Yes (\S\ref{sec:prefilter}) \\ \hline
+%  \end{tabular}
+%  \end{center} %\vspace{-4mm}
+%\end{table}
+
+%\begin{table*}[t]
+%\scriptsize
+%	\begin{center}
+%\caption{Comparison of existing techniques} \label{tab:lit_rev}
+%\begin{tabular}{ | m{2.1cm} |  m{1.2cm} | m{4cm} | m{2cm} | m{1.3cm} | m{2.5cm} |  m{1.0cm}| }
+%\hline
+%	\textbf{Tool} & \textbf{Technique} & \textbf{Similarity matching} & \textbf{Cross-architecture} & \textbf{Cross-OS} & \textbf{Complete  semantics} &  \textbf{Scalable} \\ \hline
+%	 BLEX~\cite{egele2014blanket} & Dynamic & Whole-function matching &  Limited & Limited & Yes & No \\ \hline
+%	 Tracy~\cite{DBLP:conf/pldi/DavidY14} & Static & Partial trace (fixed length) matching & No & No & No & Yes \\ \hline
+%     CoP~\cite{luo2014semantics} & Static & Pairwise basic-block matching& No & No & No & No \\ \hline
+%	Bug search~\cite{DBLP:conf/sp/PewnyGGRH15} & Static & Pairwise basic-block matching & Limited & Limited & No & Yes \\ \hline
+%	discovRE~\cite{sebastian2016discovre} & Static & Pairwise basic-block matching & Limited & Limited & No & Yes \\ \hline
+%	 BinGo & Static & Partial trace (variable length) matching & Yes & Yes & Yes &  Yes \\ \hline
+%\end{tabular}
+%\end{center} \vspace{-7mm}
+%\end{table*}
+% followed by LCSSEBB\footnote{Longest common subsequence of semantically equivalent basic-block}
+%followed by BHB\footnote{Best-Hit-Boarding algorithm
+
+
+%Here, true semantics of a program (or function) refers to the complete understanding of the functionality of the program.
+%\textsc{\small BLEX}~\cite{DBLP:conf/uss/EgeleWCB14} is the latest tool in this line, as it uses seven semantic features from an execution (e.g., calling imported library functions). %However, \textsc{\small BLEX} is for x64 binaries, not for cross-architecture code search. Pewny \emph{et al.} \cite{DBLP:conf/sp/PewnyGGRH15} propose a purely static analysis that can detect the similar code among  the binaries of the application on different OSs. This is good for finding clones of the same program due to architecture or compilation differences, but maybe not good at finding relaxed binary clones among different applications.
+
+%These approaches can be effective, but they face challenges from two aspects: the difficulty in setting up the execution environment to dynamically execute, and the scalability issue that prevents large-scale analysis.
+%In the following, we highlight the key limitations in the existing binary function matching techniques.
+%Table~\ref{tab:lit_rev} shows that static approaches cannot precisely capture the full semantics, while dynamic methods struggle for the scalability.
+%To have a better comparison, we list the key challenges that restrict the existing approaches.
+
+%\mahin{In all the techniques listed in Table~\ref{tab:lit_rev}, it is implicitly assumed that both the signature and target binaries share (or forked from) the same code base. However, this assumption is too restrictive and have limited real-world applications \footnote{This assumption is justifiable for only \textsc{\small CoP} as it is a plagiarism detection technique}.}
+%\mahin{In the techniques presented in Table~\ref{tab:lit_rev}, we find three key limitations and they are summarized below:}
+
+%\renewcommand{\theenumi}{\arabic{enumi}}
+
+%\ly{I am not happy with the following paragraph, let's discuss tmr.}
+
+In Table~\ref{tab:lit_rev}, we list the major features\xyx{\footnote{Refer to section \ref{sec:category} for details of each category of features.}} used for similarity scoring and the search optimization techniques in these tools. \emph{Low-level semantic fea.} refer to the features of low level architectural information used for matching (e.g., symbolic analysis on the CPU flag and register values~\cite{bingo}). \emph{High-level semantic fea.} refer to the features of API-relevant information used for matching (e.g., the names and sequence of invoked built-in APIs of a lib \cite{egele2014blanket}).
+ \emph{Structural fea.} refer to the structural information used by the static approaches (e.g., basic-block structures used in~\cite{luo2014semantics,DBLP:conf/sp/PewnyGGRH15,sebastian2016discovre} and fixed length tracelet in \cite{DBLP:conf/pldi/DavidY14}).  \emph{Syntactic fea.}  refer to the syntactic information used for matching (e.g., the function name, \xyx{or string literals extracted from binary \cite{DBLP:conf/msr/HemelKVD11}}).
+
+In general, merely relying on structural and syntactic features cannot make the match across the boundary of architecture, OS or compiler options, and hence fail P1. Instead, semantic features help to achieve P1. Even with the semantic features, the existing static  approaches may not capture the complete function semantics due to different function inlining options of candidate functions~\cite{DBLP:conf/sp/PewnyGGRH15}. %For example, the ability of \textsc{\small CoP}~\cite{luo2014semantics} to capture semantics is limited to the \xyx{inner-procedure} execution path only. \mahin{we may not include this. because, theoretically CoP can do this but they didn't demonstrate it in the paper. I need to think about a proper example}.
+Hence, the proper inlining strategy is desirable for achieving P2. Besides, scalability is a real challenge for tools \cite{luo2014semantics,DBLP:conf/sp/PewnyGGRH15} based on symbolic analysis (low-level semantic features) and constraint solving. For example, \textsc{CoP} took half a day to find target functions in Firefox for a few signature functions~\cite{luo2014semantics}. Thus, to achieve P3, time-consuming constraint solving should be avoided.
+
+%It can be seen easily that static approaches are not precise, while dynamic methods struggle for the scalability.
+
+%, the above challenge are the keys factors .
+
+%\textbf{P1} requires the solution to be architecture- and OS- neutral, and be resistant to the variances that arise due to the differences in compiler type and optimization level.
+%Static techniques based on the structural properties of binary functions will fail~\cite{DBLP:conf/pldi/DavidY14,luo2014semantics,DBLP:conf/sp/PewnyGGRH15,sebastian2016discovre}.
+%Most of the static analysis also assume that the functions are self-contained (i.e., invocations of libraries and other user-defined functions are ignored). Thus the true function semantics are not fully captured~\cite{DBLP:conf/pldi/DavidY14,DBLP:conf/sp/PewnyGGRH15, sebastian2016discovre}.
+%Lastly, scalability still requires more efforts to avoid matching every single target function in the database~\cite{egele2014blanket,DBLP:conf/pldi/DavidY14,luo2014semantics,DBLP:conf/sp/PewnyGGRH15}.
+
+%This work aims at addressing the limitations to build a robust, scalable binary code searching (or function matching) tool that can support cross-architecture, OS and compiler (with various optimization levels) analysis with less (no) assumptions on the nature of signature and target binaries.  To this end, we design an approach to address the aforementioned problems with the following merits.
+
+In our previous work \cite{bingo}, we propose a binary code search tool, named \tool.
+For P2, \tool adopts a \emph{selective inlining} (\S\ref{sec:inline}) to include relevant libraries and user-defined functions in order to capture the complete semantics of the function. For P3, a filtering technique   is proposed to shortlist the candidate functions. Subsequently, after inlining and filtering, for P1, \tool extracts the partial traces of various lengths from the candidate functions as function models, and then extracts \emph{low-level semantic features} from the function models (\S\ref{sec:category:lowSeFea}). Last, \tool measures the function similarity score by Jaccard containment similarity of features.
+
+
+
+%Technically, first, to recover the  complete semantics from the functions under investigation, we propose a \emph{selective inlining} technique, where the callee (both libraries and user-defined) functions are inlined into the caller such that the complete function semantics are captured~\cite{wang2015binary} (\S\ref{sec:inline}).
+%To avoid code size explosion, we selectively inline the callee functions based on the invocation dependency patterns, which differs from the traditional compiler inlining optimization techniques for maximum speed or minimum size~\cite{chang1992profile}.
+%To our best knowledge, this work is the first attempt towards investigating selective inlining in recovering binary semantics.
+%Second, to improve the scalability of our approach, we propose an \emph{architecture and OS neutral filtering} technique that narrows down the search space by shortlisting the candidate target functions for binary semantic matching (\S\ref{sec:prefilter}).
+%Next, to overcome the limitation of basic-block structures (\S\ref{sec:func_match}), we generate \emph{function models}, which are agnostic to the underlying program structure, via the length variant partial traces\footnote{A partial trace refers to a sequence of basic-blocks that lie along an execution path in the CFG~\cite{DBLP:conf/pldi/DavidY14}.} (called, partial traces of \emph{k} lengths). For each function, partial traces of length $1$ to $k$ are extracted to form the function model such that it represents the function at various granularity levels.
+%Here, we also take measure to minimize the effects of infeasible paths and compiler specific code in calculating the function similarity scores.
+%Finally, semantic features are extracted from the function models of candidate target functions, for function similarity scoring, where semantic features capture the machine state transitions in the form of Input/Output pairs (\S\ref{sec:func_match}).
+
+In our previous evaluation on a number of real-world binaries \cite{bingo}, \tool outperforms the available state-of-the-art tools (i.e., \textsc{Tracy}~\cite{DBLP:conf/pldi/DavidY14} and \textsc{BinDiff}~\cite{DBLP:conf/dimva/Flake04}),  for the same tasks in terms of search accuracy and performance. %Applying \tool, we also discovered a 0day vulnerability (CVE-2016-0933) in the Adobe PDF Reader with the 4000USD bug bounty.
+However, we found some false positive (FP) cases in using \tool. When a function has a small size of assembly instructions, the low-level semantic features extracted from this function could be too generic to contain any real semantics. For example, \xyx{Fig. \ref{fig:falseposi} shows a false positive case of \tool~due to the same input/output values (see details in \S \ref{subsec:sem_chall})}. %\mahin{I'll need to find a suitable example.}
+
+To address the FP cases, the new version of our tool, \toolNew, supports high-level semantic features and structural features. High-level semantic features we use are the information of system call or library call (\S \ref{sec:category:highSemanticFea}). The rationale is that such information is commonly used for malware detection \cite{DBLP:conf/issta/CanaliLBKCK12}, as they can reveal the semantics of the functions. On the other hand, we borrow the idea of fast bytecode clone detection based on the approach of projecting the CFG  into a  centroid of 3 dimension coordinate \cite{DBLP:conf/icse/ChenLZ14}. Inspired by this approach (3D-CFG for short \cite{DBLP:conf/icse/ChenLZ14}), the problem of graph isomorphism is reduced to a problem of calculating the distances among centroids. 3D-CFG implemented in  \toolNew adopts the following structural information (\S \ref{sec:category:structralFea}): \xyx{basic block (BB) sequence, loop information, and in-degree/out-degree of BB. }
+
+To speed up the process, \toolNew leverages on the emulation rather than  constraint solving that is used in extracting low-level semantic features. %Note that we refer \emph{micro execution} to the term of the mechanism to execute any assembly code snippet without test driver or user input, not to the tool \textsc{MicroX}~\cite{DBLP:conf/icse/Godefroid14}. \textsc{MicroX}, Microsoft's VM tool allowing micro execution of x86 binary code, cannot be used for cross architecture code search. Instead,
+We adopt \textsc{Unicorn}~\cite{unicorn}, a lightweight multi-platform, multi-architecture CPU emulator framework, to virtually execute the partial traces that are extracted from the function models of a given function. The emulation step may take significantly less time than constraint solving. The challenge of integrating \textsc{Unicorn}~\cite{unicorn} lies in \xyx{the handle of function calls (\S \ref{sec:emulation})}. Last, similarity scores of two functions in terms of structures, low-level/high-level semantics are combined in the final matching.
+
+\noindent\textbf{Key contributions.} Beyond the contributions that have been made in our previous work \cite{bingo}, we make these  new contributions:
+\begin{itemize}[nolistsep]
+\itemsep0em
+\item Our work is the first attempt to incorporate emulation with cross-architecture cross-OS binary code search.
+ %We leverage on \emph{k}-length partial traces to model the function at various granularity levels that is agnostic to underlying program structures.
+\item We extract structural feature based on the idea of centroid based clone detection. Previously, 3D-CFG based matching was mainly applied for bytecode clone detection.
+
+ \item \xyx{We combine different categories of features listed in Table \ref{tab:lit_rev}. We evaluate our approach under the scenarios of cross-architecture matching, cross-OS matching, and cross-compiler matching.}
+%\item introduce an architecture and OS neutral function filtering process that helps narrow down the target function search space.
+\item We empirically compare \toolNew with \tool and the available state-of-the-art tools of binary code search in terms of search accuracy and performance. %We also apply \toolNew for the task of library function identification. The results show that \toolNew  can improve XX\% of accuracy  compared with the state-of-art tool REFG \cite{DBLP:journals/tse/QiuSM16}.  %we also show that \tool can be used to hunt zero-day vulnerabilities from COT binaries.
+\end{itemize}
+

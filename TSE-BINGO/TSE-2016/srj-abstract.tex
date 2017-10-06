@@ -1,0 +1,19 @@
+%srj
+%aum gaanathipathaye namaha
+%\todo {\color{blue} I need to work on the abstract later. current version is outdated}
+%Vulnerability detection at machine code level (or binary) is a key for securing closed-source computer systems. One of the challenges in machine code analysis (in contract to source code analysis) is that it is not straight forward to locate the vulnerable code portions even when the bug is publicly disclosed.  Locating vulnerable code portions in a binary is a daunting task that needs special attention.
+
+
+%In this paper, we try to address this problem by combining hybrid program analysis and nearest neighbour searching techniques. That is, we extract the synthetic (code properties) and semantic (effect and/or side-effects of executing the code) features from known vulnerable functions and search for similar vulnerable patters in the target binary. Here, synthetic features improves the scalability by speeding-up the search process to identify the candidate vulnerable functions, while semantic features reduce the false positive rate by confirming the vulnerability. The experimental results show that our technique can detect vulnerabilities across OS boundaries (i.e., bug signatures from Linux binaries can be used to detect similar vulnerabilities in binaries compiled for Windows) and our tool takes less time to locate a potential vulnerability compare to the results reported in previous works.
+
+
+Binary code search has received much attention recently due to its impactful applications,
+%\ly{give some easy examples, plagiristhm detections, auditing... this one is too concrete and hard to follow for SE people}
+e.g., plagiarism detection, malware detection and software vulnerability auditing.
+ %in particular, finding 0day vulnerability in proprietary binary by matching the known vulnerability from open source software.
+However, developing an effective binary code search tool is challenging due to the gigantic syntax and structural differences in binaries resulted from different compilers, architectures and OSs.
+In this paper, we propose \tool --- a scalable and robust binary search engine supporting various architectures and OSs.
+The key contribution is a selective inlining technique to capture the complete function semantics by inlining relevant library and user-defined functions.
+In addition, architecture and OS neutral function filtering is proposed to dramatically reduce the irrelevant target functions.
+Besides, we introduce length variant partial traces to model binary functions in a program structure agnostic fashion.
+The experimental results show that \tool can find semantic similar functions across architecture and OS boundaries, even with the presence of program structure distortion, in a scalable manner. Using \tool, we have discovered a zero-day vulnerability in Adobe PDF Reader, a COTS binary.

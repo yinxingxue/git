@@ -1,0 +1,267 @@
+
+
+
+\begin{table*}[h!]
+	\begin{center}
+		\caption{Rank distribution of matched functions, in \texttt{coreutils} binaries, across architectures. Functions in x86 (32bit architecture) are used as signature to match semantically  equivalent functions in x86-64 (64bit architecture)\\}
+		\label{tab:x86_x64_core}
+		\scriptsize
+
+
+\begin{tabular}{ | l | l | l | l | l || l | l | l | l | l || l | l | l | l | l | }
+\hline
+	Binary & Rank 1 & Top 3 & Top 5 & Top 10 & Binary & Rank 1 & Top 3 & Top 5 & Top 10 & Binary & Rank 1 & Top 3 & Top 5 & Top 10 \\ \hline
+	\  & \  & \  & \  & \  & \  & \  & \  & \  & \  & \  & \  & \  & \  & \   \\ \hline
+	true, & 0.5 & 0.69 & 0.75 & 0.91 & tac & 0.47 & 0.71 & 0.79 & 0.92 & truncate & 0.4 & 0.65 & 0.75 & 0.9 \\ \hline
+	false. & 0.5 & 0.69 & 0.75 & 0.91 & test & 0.55 & 0.73 & 0.8 & 0.93 & timeout & 0.36 & 0.63 & 0.7 & 0.88 \\ \hline
+	tty & 0.48 & 0.73 & 0.79 & 0.91 & comm & 0.5 & 0.78 & 0.83 & 0.89 & mkdir & 0.37 & 0.56 & 0.69 & 0.83 \\ \hline
+	printenv & 0.48 & 0.7 & 0.79 & 0.94 & mknod & 0.5 & 0.75 & 0.78 & 0.92 & shuf & 0.39 & 0.67 & 0.8 & 0.86 \\ \hline
+	sync & 0.47 & 0.68 & 0.79 & 0.88 & tsort & 0.56 & 0.7 & 0.77 & 0.86 & chmod & 0.33 & 0.64 & 0.73 & 0.82 \\ \hline
+	hostid & 0.47 & 0.68 & 0.76 & 0.88 & fmt & 0.45 & 0.73 & 0.82 & 0.91 & dd & 0.4 & 0.74 & 0.79 & 0.9 \\ \hline
+	unlink & 0.47 & 0.71 & 0.76 & 0.85 & base64 & 0.5 & 0.79 & 0.83 & 0.9 & shred & 0.34 & 0.7 & 0.75 & 0.89 \\ \hline
+	logname & 0.5 & 0.71 & 0.76 & 0.91 & pinky & 0.49 & 0.76 & 0.83 & 0.95 & touch & 0.34 & 0.63 & 0.71 & 0.86 \\ \hline
+	link & 0.5 & 0.71 & 0.76 & 0.91 & chroot & 0.45 & 0.76 & 0.79 & 0.89 & date & 0.44 & 0.68 & 0.76 & 0.9 \\ \hline
+	env & 0.48 & 0.73 & 0.76 & 0.94 & [ & 0.43 & 0.68 & 0.77 & 0.89 & ln & 0.32 & 0.57 & 0.72 & 0.83 \\ \hline
+	dirname & 0.46 & 0.71 & 0.8 & 0.91 & id & 0.39 & 0.74 & 0.76 & 0.89 & sha384sum & 0.47 & 0.69 & 0.73 & 0.89 \\ \hline
+	yes & 0.44 & 0.71 & 0.76 & 0.88 & cut & 0.49 & 0.71 & 0.8 & 0.95 & sha512sum & 0.47 & 0.69 & 0.73 & 0.89 \\ \hline
+	uname & 0.5 & 0.74 & 0.76 & 0.88 & nl & 0.53 & 0.78 & 0.8 & 0.93 & pr & 0.42 & 0.69 & 0.78 & 0.89 \\ \hline
+	whoami & 0.47 & 0.71 & 0.76 & 0.85 & expr & 0.35 & 0.71 & 0.77 & 0.9 & stty & 0.44 & 0.72 & 0.76 & 0.9 \\ \hline
+	echo & 0.56 & 0.74 & 0.82 & 0.91 & md5sum & 0.52 & 0.71 & 0.76 & 0.93 & chcon & 0.34 & 0.64 & 0.74 & 0.84 \\ \hline
+	runcon & 0.55 & 0.76 & 0.82 & 0.91 & sum & 0.44 & 0.74 & 0.79 & 0.93 & chgrp & 0.3 & 0.62 & 0.74 & 0.82 \\ \hline
+	basename & 0.5 & 0.74 & 0.76 & 0.91 & uptime & 0.51 & 0.73 & 0.76 & 0.9 & rm & 0.27 & 0.59 & 0.69 & 0.8 \\ \hline
+	pathchk & 0.52 & 0.76 & 0.82 & 0.91 & head & 0.48 & 0.75 & 0.77 & 0.91 & chown & 0.32 & 0.63 & 0.73 & 0.81 \\ \hline
+	sleep & 0.49 & 0.65 & 0.76 & 0.89 & mktemp & 0.45 & 0.73 & 0.82 & 0.89 & realpath & 0.33 & 0.57 & 0.71 & 0.84 \\ \hline
+	mkfifo & 0.51 & 0.69 & 0.8 & 0.91 & uniq & 0.49 & 0.8 & 0.84 & 0.92 & ptx & 0.43 & 0.7 & 0.73 & 0.92 \\ \hline
+	users & 0.54 & 0.73 & 0.76 & 0.89 & readlink & 0.3 & 0.59 & 0.7 & 0.84 & tail & 0.29 & 0.6 & 0.73 & 0.84 \\ \hline
+	tee & 0.56 & 0.75 & 0.81 & 0.89 & wc & 0.45 & 0.7 & 0.77 & 0.91 & od & 0.34 & 0.75 & 0.81 & 0.93 \\ \hline
+	pwd & 0.53 & 0.75 & 0.81 & 0.92 & tr & 0.47 & 0.74 & 0.81 & 0.93 & split & 0.43 & 0.72 & 0.77 & 0.9 \\ \hline
+	paste & 0.47 & 0.76 & 0.85 & 0.94 & join & 0.42 & 0.77 & 0.81 & 0.89 & stdbuf & 0.36 & 0.69 & 0.76 & 0.88 \\ \hline
+	cksum & 0.5 & 0.75 & 0.78 & 0.89 & rmdir & 0.59 & 0.79 & 0.82 & 0.92 & stat & 0.41 & 0.72 & 0.8 & 0.9 \\ \hline
+	nice & 0.5 & 0.74 & 0.82 & 0.91 & sha224sum & 0.53 & 0.71 & 0.78 & 0.89 & factor & 0.33 & 0.68 & 0.74 & 0.92 \\ \hline
+	nproc & 0.51 & 0.74 & 0.83 & 0.91 & sha256sum & 0.53 & 0.71 & 0.78 & 0.89 & sort & 0.34 & 0.63 & 0.75 & 0.84 \\ \hline
+	expand & 0.43 & 0.73 & 0.73 & 0.86 & sha1sum & 0.5 & 0.74 & 0.79 & 0.93 & df & 0.33 & 0.59 & 0.71 & 0.81 \\ \hline
+	kill & 0.5 & 0.72 & 0.81 & 0.92 & csplit & 0.43 & 0.7 & 0.72 & 0.83 & ls & 0.28 & 0.62 & 0.75 & 0.9 \\ \hline
+	groups & 0.46 & 0.74 & 0.8 & 0.91 & seq & 0.53 & 0.79 & 0.81 & 0.91 & dir & 0.28 & 0.62 & 0.75 & 0.9 \\ \hline
+	unexpand & 0.5 & 0.75 & 0.75 & 0.89 & who & 0.52 & 0.8 & 0.83 & 0.93 & vdir & 0.28 & 0.62 & 0.75 & 0.9 \\ \hline
+	fold & 0.51 & 0.76 & 0.78 & 0.95 & printf & 0.54 & 0.76 & 0.8 & 0.89 & du & 0.26 & 0.54 & 0.71 & 0.83 \\ \hline
+	nohup & 0.46 & 0.65 & 0.73 & 0.92 & cat & 0.4 & 0.71 & 0.75 & 0.88 & mv & 0.32 & 0.54 & 0.7 & 0.82 \\ \hline
+	dircolors & 0.47 & 0.76 & 0.82 & 0.95 & numfmt & 0.42 & 0.7 & 0.77 & 0.88 & cp & 0.27 & 0.52 & 0.66 & 0.82 \\ \hline
+\end{tabular}
+\end{center}
+\end{table*}
+
+%\begin{table*}[t]
+%\begin{center}
+%\caption{Ranks range of matched functions in \texttt{msvcrt.dll} (closed-source) against \texttt{libc.so} (open-source). \\}
+%		\label{tab:msvcrt_libc}
+%		\scriptsize
+%
+%%\begin{tabular}{ | l | l | l | l | l | }
+%\begin{tabular}{|p{1cm}|p{12cm}|p{0.5cm}|p{0.5cm}|p{0.5cm}|}
+%\hline
+%	Rank range & Matched functions & No. of Func. & \% & Cum. \% \\ \hline
+%	1.0 & memset, strcmp & 2 & 1.3 &  1.3\\ \hline
+%	2-3 & stat, strncat, wcspbrk, printf, strcat, open, time, setbuf, wcstod & 9.0 & 5.7 & 7.0 \\ \hline
+%	4-5 & rand, expand, raise, strtok, wprintf, scanf, lock, asctime, memcmp, realloc, read, strlen, memcpy & 13 & 8.2 & 15.2 \\ \hline
+%	6-10 & strncmp, rename, fread, wcschr, ldexp, fwprintf, tempnam, fprintf, assert, fgets, strchr, log, puts, fwscanf, strtod, fwrite, getc, qsort, creat, wcscmp, wcsncat, putc, strrchr, gets, wcsrchr, close, vprintf, strcspn, wcstok, wcsncpy, fgetws, getw, free, swprintf, strpbrk, wcscspn, wcsncmp, wscanf, write, perror, fputs, memmove, wcsspn, signal, fscanf, strerror, remove, wcscpy, strerror, strspn, bsearch, eof, ungetc, memchr & 54 & 34.2 &  49.4\\ \hline
+%	11-20 & wcsftime, sscanf, setlocale, wctomb, strxfrm, fclose, tmpfile, isprint, isdigit, fflush, wcsxfrm, feof, towupper, strncpy, wcslen, itoa, ispunct, clearerr, isalnum, clock, atof, system, isxdigit, frexp, vwprintf, isalpha, exit, sprintf, tmpnam, snprintf, mbstowcs, isspace, localtime, longjmp, exp, iswctype, wcscoll, ferror, gmtime, getenv, labs, wcscat, isgraph, vswprintf, atol, ungetwc, strcoll, vsnprintf, strstr, fputws, towlower, wcstombs, swscanf, mblen, iscntrl, malloc, fputwc, modf, islower, getcwd, isupper, vsprintf & 62 & 39.2 &  88.6\\ \hline
+%	21-50 & strtol, ctime, errno, ldiv, wcstoul, tolower, mbtowc, toupper, atexit, wcstol, strtoul, itow, toupper, exit, fopen, setjmp, strftime, tolower & 18 & 11.4 & 100.0 \\ \hline
+%\end{tabular}
+%\end{center}
+%\end{table*}
+
+	
+\begin{table*}[h!]
+	\begin{center}
+		\caption{Rank distribution of matched functions, in \texttt{coreutils} binaries, across compilers with similar code optimization level. Functions in \texttt{coreutils} binaries compiled using \texttt{gcc} (O3) are used as signature to match semantically  equivalent functions in binaries compiled using Clang (O3)\\}
+		\label{tab:x86_gcc_clang_O3}
+		\scriptsize
+\begin{tabular}{ | l | l | l | l | l || l | l | l | l | l || l | l | l | l | l | }
+\hline
+	Binary & Rank 1 & Top 3 & Top 5 & Top 10 & Binary & Rank 1 & Top 3 & Top 5 & Top 10 & Binary & Rank 1 & Top 3 & Top 5 & Top 10 \\ \hline
+	`true & 0.6 & 0.725 & 0.75 & 0.825 & tac & 0.587 & 0.674 & 0.739 & 0.826 & truncate & 0.614 & 0.649 & 0.772 & 0.842 \\ \hline
+	`false & 0.6 & 0.725 & 0.75 & 0.825 & test & 0.565 & 0.739 & 0.761 & 0.848 & timeout & 0.571 & 0.635 & 0.698 & 0.81 \\ \hline
+	tty & 0.585 & 0.756 & 0.756 & 0.829 & comm & 0.583 & 0.708 & 0.771 & 0.833 & mkdir & 0.617 & 0.667 & 0.75 & 0.8 \\ \hline
+	printenv & 0.61 & 0.756 & 0.756 & 0.829 & mknod & 0.636 & 0.75 & 0.773 & 0.795 & shuf & 0.48 & 0.587 & 0.653 & 0.76 \\ \hline
+	sync & 0.595 & 0.738 & 0.762 & 0.833 & tsort & 0.612 & 0.755 & 0.755 & 0.837 & chmod & 0.506 & 0.597 & 0.636 & 0.727 \\ \hline
+	hostid & 0.595 & 0.738 & 0.762 & 0.833 & fmt & 0.596 & 0.723 & 0.766 & 0.766 & dd & 0.523 & 0.677 & 0.692 & 0.738 \\ \hline
+	unlink & 0.595 & 0.738 & 0.786 & 0.833 & base64 & 0.565 & 0.739 & 0.761 & 0.783 & shred & 0.597 & 0.661 & 0.726 & 0.79 \\ \hline
+	logname & 0.595 & 0.738 & 0.762 & 0.833 & pinky & 0.56 & 0.78 & 0.8 & 0.84 & touch & 0.536 & 0.696 & 0.75 & 0.804 \\ \hline
+	link & 0.595 & 0.762 & 0.762 & 0.833 & chroot & 0.617 & 0.723 & 0.766 & 0.809 & date & 0.585 & 0.736 & 0.774 & 0.811 \\ \hline
+	env & 0.61 & 0.756 & 0.756 & 0.805 & [ & 0.529 & 0.686 & 0.725 & 0.824 & ln & 0.506 & 0.602 & 0.651 & 0.735 \\ \hline
+	dirname & 0.605 & 0.744 & 0.744 & 0.837 & id & 0.596 & 0.723 & 0.745 & 0.83 & sha384sum & 0.63 & 0.717 & 0.761 & 0.826 \\ \hline
+	yes & 0.595 & 0.738 & 0.762 & 0.833 & cut & 0.574 & 0.766 & 0.766 & 0.83 & sha512sum & 0.617 & 0.702 & 0.723 & 0.809 \\ \hline
+	uname & 0.585 & 0.732 & 0.756 & 0.829 & nl & 0.63 & 0.739 & 0.783 & 0.804 & pr & 0.492 & 0.656 & 0.705 & 0.754 \\ \hline
+	whoami & 0.595 & 0.738 & 0.762 & 0.833 & expr & 0.544 & 0.684 & 0.754 & 0.789 & stty & 0.569 & 0.745 & 0.765 & 0.804 \\ \hline
+	echo & 0.61 & 0.756 & 0.756 & 0.829 & md5sum & 0.563 & 0.667 & 0.708 & 0.813 & chcon & 0.519 & 0.62 & 0.646 & 0.734 \\ \hline
+	runcon & 0.585 & 0.732 & 0.756 & 0.829 & sum & 0.604 & 0.736 & 0.755 & 0.83 & chgrp & 0.461 & 0.566 & 0.618 & 0.724 \\ \hline
+	basename & 0.571 & 0.714 & 0.786 & 0.833 & uptime & 0.609 & 0.761 & 0.761 & 0.848 & rm & 0.476 & 0.573 & 0.61 & 0.707 \\ \hline
+	pathchk & 0.61 & 0.756 & 0.756 & 0.829 & head & 0.62 & 0.72 & 0.76 & 0.82 & chown & 0.442 & 0.571 & 0.597 & 0.701 \\ \hline
+	sleep & 0.556 & 0.711 & 0.733 & 0.822 & mktemp & 0.577 & 0.692 & 0.712 & 0.808 & realpath & 0.537 & 0.622 & 0.659 & 0.768 \\ \hline
+	mkfifo & 0.628 & 0.744 & 0.791 & 0.814 & uniq & 0.585 & 0.698 & 0.755 & 0.811 & ptx & 0.514 & 0.657 & 0.743 & 0.786 \\ \hline
+	users & 0.6 & 0.733 & 0.756 & 0.822 & readlink & 0.529 & 0.603 & 0.662 & 0.779 & tail & 0.468 & 0.62 & 0.658 & 0.722 \\ \hline
+	tee & 0.595 & 0.69 & 0.714 & 0.786 & wc & 0.608 & 0.765 & 0.784 & 0.843 & od & 0.468 & 0.584 & 0.623 & 0.74 \\ \hline
+	pwd & 0.61 & 0.707 & 0.732 & 0.805 & tr & 0.583 & 0.729 & 0.771 & 0.833 & split & 0.571 & 0.671 & 0.757 & 0.829 \\ \hline
+	paste & 0.634 & 0.756 & 0.756 & 0.829 & join & 0.556 & 0.685 & 0.722 & 0.796 & stdbuf & 0.594 & 0.703 & 0.781 & 0.844 \\ \hline
+	cksum & 0.644 & 0.756 & 0.778 & 0.822 & rmdir & 0.617 & 0.745 & 0.809 & 0.809 & stat & 0.576 & 0.727 & 0.788 & 0.818 \\ \hline
+	nice & 0.619 & 0.738 & 0.762 & 0.833 & sha224sum & 0.583 & 0.729 & 0.75 & 0.813 & factor & 0.507 & 0.652 & 0.725 & 0.841 \\ \hline
+	nproc & 0.628 & 0.767 & 0.767 & 0.837 & sha256sum & 0.604 & 0.729 & 0.75 & 0.813 & sort & 0.426 & 0.565 & 0.657 & 0.731 \\ \hline
+	expand & 0.614 & 0.75 & 0.773 & 0.841 & sha1sum & 0.609 & 0.717 & 0.739 & 0.804 & df & 0.557 & 0.632 & 0.642 & 0.736 \\ \hline
+	kill & 0.591 & 0.773 & 0.773 & 0.818 & csplit & 0.574 & 0.704 & 0.759 & 0.778 & ls & 0.393 & 0.521 & 0.607 & 0.671 \\ \hline
+	groups & 0.667 & 0.756 & 0.778 & 0.8 & seq & 0.58 & 0.72 & 0.78 & 0.8 & dir & 0.393 & 0.521 & 0.607 & 0.671 \\ \hline
+	unexpand & 0.636 & 0.75 & 0.773 & 0.818 & who & 0.582 & 0.745 & 0.782 & 0.818 & vdir & 0.393 & 0.521 & 0.607 & 0.671 \\ \hline
+	fold & 0.651 & 0.744 & 0.767 & 0.837 & printf & 0.558 & 0.673 & 0.731 & 0.808 & du & 0.496 & 0.555 & 0.63 & 0.664 \\ \hline
+	nohup & 0.533 & 0.689 & 0.733 & 0.822 & cat & 0.596 & 0.702 & 0.789 & 0.842 & mv & 0.5 & 0.583 & 0.625 & 0.7 \\ \hline
+	dircolors & 0.578 & 0.756 & 0.778 & 0.844 & numfmt & 0.56 & 0.74 & 0.74 & 0.8 & cp & 0.508 & 0.582 & 0.615 & 0.705 \\ \hline
+\end{tabular}
+
+\end{center}
+\end{table*}
+
+
+\begin{table*}[h!]
+	\begin{center}
+		\caption{Rank distribution of matched functions, in \texttt{coreutils} binaries, across compilers with different code optimization levels. Functions in \texttt{coreutils} binaries compiled using \texttt{gcc} (O3) are used as signature to match semantically  equivalent functions in binaries compiled using Clang (O0)\\}
+		\label{tab:x86_gcc_O3_clang_O0}
+		\scriptsize
+
+\begin{tabular}{ | l | l | l | l | l | l | l | l | l | l | l | l | l | l | l | }
+\hline
+	Binary & Rank 1 & Top 3 & Top 5 & Top 10 & Binary & Rank 1 & Top 3 & Top 5 & Top 10 & Binary & Rank 1 & Top 3 & Top 5 & Top 10 \\ \hline
+	`true & 0.414 & 0.621 & 0.724 & 0.862 & tac & 0.528 & 0.667 & 0.75 & 0.806 & truncate & 0.386 & 0.591 & 0.636 & 0.773 \\ \hline
+	`false & 0.414 & 0.621 & 0.724 & 0.862 & test & 0.531 & 0.75 & 0.813 & 0.844 & timeout & 0.429 & 0.612 & 0.653 & 0.755 \\ \hline
+	tty & 0.433 & 0.7 & 0.733 & 0.767 & comm & 0.485 & 0.697 & 0.727 & 0.788 & mkdir & 0.404 & 0.66 & 0.745 & 0.766 \\ \hline
+	printenv & 0.4 & 0.667 & 0.767 & 0.833 & mknod & 0.424 & 0.636 & 0.788 & 0.788 & shuf & 0.339 & 0.589 & 0.625 & 0.75 \\ \hline
+	sync & 0.452 & 0.677 & 0.71 & 0.806 & tsort & 0.378 & 0.622 & 0.676 & 0.784 & chmod & 0.369 & 0.508 & 0.569 & 0.708 \\ \hline
+	hostid & 0.419 & 0.645 & 0.71 & 0.774 & fmt & 0.297 & 0.486 & 0.568 & 0.73 & dd & 0.426 & 0.63 & 0.704 & 0.778 \\ \hline
+	unlink & 0.452 & 0.677 & 0.71 & 0.774 & base64 & 0.361 & 0.639 & 0.722 & 0.75 & shred & 0.447 & 0.638 & 0.702 & 0.83 \\ \hline
+	logname & 0.419 & 0.677 & 0.71 & 0.774 & pinky & 0.487 & 0.692 & 0.718 & 0.769 & touch & 0.37 & 0.609 & 0.63 & 0.739 \\ \hline
+	link & 0.452 & 0.645 & 0.742 & 0.742 & chroot & 0.444 & 0.611 & 0.667 & 0.75 & date & 0.381 & 0.595 & 0.69 & 0.786 \\ \hline
+	env & 0.5 & 0.667 & 0.767 & 0.8 & [ & 0.459 & 0.649 & 0.73 & 0.784 & ln & 0.304 & 0.478 & 0.594 & 0.725 \\ \hline
+	dirname & 0.406 & 0.656 & 0.75 & 0.781 & id & 0.444 & 0.639 & 0.694 & 0.75 & sha384sum & 0.459 & 0.73 & 0.784 & 0.838 \\ \hline
+	yes & 0.452 & 0.677 & 0.742 & 0.806 & cut & 0.4 & 0.629 & 0.714 & 0.771 & sha512sum & 0.459 & 0.676 & 0.784 & 0.838 \\ \hline
+	uname & 0.467 & 0.7 & 0.8 & 0.8 & nl & 0.471 & 0.676 & 0.794 & 0.853 & pr & 0.377 & 0.566 & 0.623 & 0.755 \\ \hline
+	whoami & 0.419 & 0.677 & 0.71 & 0.806 & expr & 0.37 & 0.565 & 0.63 & 0.717 & stty & 0.419 & 0.674 & 0.744 & 0.814 \\ \hline
+	echo & 0.419 & 0.71 & 0.774 & 0.871 & md5sum & 0.459 & 0.649 & 0.784 & 0.811 & chcon & 0.388 & 0.552 & 0.627 & 0.761 \\ \hline
+	runcon & 0.467 & 0.7 & 0.733 & 0.833 & sum & 0.463 & 0.634 & 0.732 & 0.78 & chgrp & 0.344 & 0.484 & 0.609 & 0.703 \\ \hline
+	basename & 0.433 & 0.667 & 0.767 & 0.767 & uptime & 0.417 & 0.694 & 0.778 & 0.778 & rm & 0.362 & 0.536 & 0.594 & 0.681 \\ \hline
+	pathchk & 0.5 & 0.733 & 0.833 & 0.833 & head & 0.512 & 0.674 & 0.791 & 0.814 & chown & 0.323 & 0.477 & 0.554 & 0.677 \\ \hline
+	sleep & 0.412 & 0.676 & 0.706 & 0.765 & mktemp & 0.486 & 0.649 & 0.73 & 0.784 & realpath & 0.279 & 0.441 & 0.559 & 0.676 \\ \hline
+	mkfifo & 0.469 & 0.75 & 0.781 & 0.813 & uniq & 0.395 & 0.658 & 0.763 & 0.816 & ptx & 0.333 & 0.556 & 0.593 & 0.722 \\ \hline
+	users & 0.424 & 0.636 & 0.727 & 0.727 & readlink & 0.309 & 0.527 & 0.636 & 0.709 & tail & 0.391 & 0.565 & 0.623 & 0.681 \\ \hline
+	tee & 0.469 & 0.75 & 0.813 & 0.813 & wc & 0.41 & 0.641 & 0.718 & 0.744 & od & 0.364 & 0.47 & 0.545 & 0.697 \\ \hline
+	pwd & 0.419 & 0.645 & 0.742 & 0.806 & tr & 0.333 & 0.59 & 0.692 & 0.744 & split & 0.375 & 0.536 & 0.589 & 0.75 \\ \hline
+	paste & 0.433 & 0.667 & 0.667 & 0.8 & join & 0.4 & 0.6 & 0.65 & 0.75 & stdbuf & 0.373 & 0.529 & 0.647 & 0.745 \\ \hline
+	cksum & 0.441 & 0.676 & 0.765 & 0.765 & rmdir & 0.457 & 0.657 & 0.743 & 0.743 & stat & 0.404 & 0.632 & 0.719 & 0.807 \\ \hline
+	nice & 0.452 & 0.742 & 0.774 & 0.806 & sha224sum & 0.474 & 0.684 & 0.789 & 0.816 & factor & 0.3 & 0.383 & 0.483 & 0.6 \\ \hline
+	nproc & 0.406 & 0.719 & 0.75 & 0.813 & sha256sum & 0.5 & 0.684 & 0.789 & 0.816 & sort & 0.326 & 0.427 & 0.506 & 0.64 \\ \hline
+	expand & 0.485 & 0.727 & 0.788 & 0.818 & sha1sum & 0.444 & 0.667 & 0.806 & 0.833 & df & 0.308 & 0.407 & 0.527 & 0.637 \\ \hline
+	kill & 0.469 & 0.688 & 0.844 & 0.844 & csplit & 0.381 & 0.571 & 0.595 & 0.69 & ls & 0.196 & 0.313 & 0.375 & 0.438 \\ \hline
+	groups & 0.441 & 0.676 & 0.706 & 0.824 & seq & 0.462 & 0.692 & 0.769 & 0.795 & dir & 0.196 & 0.313 & 0.375 & 0.438 \\ \hline
+	unexpand & 0.515 & 0.727 & 0.818 & 0.848 & who & 0.455 & 0.636 & 0.682 & 0.75 & vdir & 0.196 & 0.313 & 0.375 & 0.438 \\ \hline
+	fold & 0.406 & 0.688 & 0.813 & 0.844 & printf & 0.488 & 0.634 & 0.683 & 0.78 & du & 0.327 & 0.446 & 0.505 & 0.634 \\ \hline
+	nohup & 0.471 & 0.676 & 0.794 & 0.824 & cat & 0.432 & 0.614 & 0.682 & 0.795 & mv & 0.272 & 0.437 & 0.544 & 0.631 \\ \hline
+	dircolors & 0.455 & 0.667 & 0.788 & 0.818 & numfmt & 0.475 & 0.575 & 0.725 & 0.8 & cp & 0.25 & 0.423 & 0.519 & 0.625 \\ \hline
+\end{tabular}
+\end{center}
+\end{table*}
+
+
+
+\begin{table*}[h!]
+	\begin{center}
+		\caption{Rank distribution of matched functions, in \texttt{coreutils} binaries, same compiler with different code optimization levels. Functions in \texttt{coreutils} binaries compiled using \texttt{gcc} (O3) are used as signature to match semantically  equivalent functions in binaries compiled using \texttt{gcc} (O0)\\}
+		\label{tab:x86_gcc_O3_clang_O0}
+		\scriptsize
+\begin{tabular}{ | l | l | l | l | l | l | l | l | l | l | l | l | l | l | l | }
+\hline
+	\  & \  & \  & \  & \  & \  & \  & \  & \  & \  & \  & \  & \  & \  & \  \\ \hline
+	avg & 0.664754902 & 0.8055490196 & 0.8510686275 & 0.9293431373 & \  & \  & \  & \  & \  & \  & \  & \  & \  & \  \\ \hline
+	Binary & Rank1 & Top 3 & Top 5 & Top 10 & Binary & Rank1 & Top 3 & Top 5 & Top 10 & Binary & Rank1 & Top 3 & Top 5 & Top 10 \\ \hline
+	`true & 0.8 & 0.9 & 0.95 & 1.0 & tac & 0.815 & 0.889 & 0.926 & 1.0 & truncate & 0.686 & 0.829 & 0.943 & 0.971 \\ \hline
+	`false & 0.8 & 0.9 & 0.95 & 1.0 & test & 0.6 & 0.8 & 0.84 & 0.96 & timeout & 0.75 & 0.875 & 0.925 & 0.95 \\ \hline
+	tty & 0.762 & 0.905 & 0.905 & 1.0 & comm & 0.75 & 0.833 & 0.917 & 1.0 & mkdir & 0.65 & 0.875 & 0.925 & 0.95 \\ \hline
+	printenv & 0.81 & 0.905 & 0.905 & 1.0 & mknod & 0.708 & 0.833 & 0.875 & 0.958 & shuf & 0.489 & 0.66 & 0.702 & 0.809 \\ \hline
+	sync & 0.773 & 0.909 & 0.955 & 1.0 & tsort & 0.667 & 0.889 & 0.889 & 1.0 & chmod & 0.436 & 0.673 & 0.709 & 0.8 \\ \hline
+	hostid & 0.818 & 0.909 & 0.955 & 1.0 & fmt & 0.607 & 0.75 & 0.821 & 0.893 & dd & 0.512 & 0.767 & 0.791 & 0.907 \\ \hline
+	unlink & 0.818 & 0.909 & 0.909 & 1.0 & base64 & 0.667 & 0.815 & 0.852 & 0.963 & shred & 0.583 & 0.778 & 0.861 & 0.944 \\ \hline
+	logname & 0.818 & 0.909 & 0.909 & 1.0 & pinky & 0.759 & 0.862 & 0.897 & 1.0 & touch & 0.629 & 0.8 & 0.857 & 0.914 \\ \hline
+	link & 0.727 & 0.818 & 0.909 & 1.0 & chroot & 0.704 & 0.815 & 0.889 & 0.926 & date & 0.667 & 0.867 & 0.867 & 0.933 \\ \hline
+	env & 0.81 & 0.905 & 0.905 & 1.0 & [ & 0.63 & 0.778 & 0.889 & 0.963 & ln & 0.474 & 0.737 & 0.754 & 0.842 \\ \hline
+	dirname & 0.783 & 0.913 & 0.913 & 1.0 & id & 0.63 & 0.852 & 0.889 & 0.926 & sha384sum & 0.759 & 0.828 & 0.897 & 0.966 \\ \hline
+	yes & 0.773 & 0.909 & 0.909 & 1.0 & cut & 0.731 & 0.846 & 0.885 & 0.923 & sha512sum & 0.759 & 0.828 & 0.897 & 0.966 \\ \hline
+	uname & 0.762 & 0.905 & 0.905 & 1.0 & nl & 0.68 & 0.84 & 0.88 & 1.0 & pr & 0.571 & 0.714 & 0.833 & 0.905 \\ \hline
+	whoami & 0.773 & 0.864 & 0.864 & 0.955 & expr & 0.541 & 0.703 & 0.784 & 0.919 & stty & 0.706 & 0.824 & 0.882 & 0.941 \\ \hline
+	echo & 0.773 & 0.909 & 0.909 & 1.0 & md5sum & 0.786 & 0.857 & 0.893 & 0.929 & chcon & 0.534 & 0.724 & 0.741 & 0.81 \\ \hline
+	runcon & 0.762 & 0.857 & 0.905 & 1.0 & sum & 0.667 & 0.9 & 0.933 & 0.967 & chgrp & 0.473 & 0.6 & 0.709 & 0.8 \\ \hline
+	basename & 0.81 & 0.905 & 0.905 & 1.0 & uptime & 0.815 & 0.889 & 0.889 & 1.0 & rm & 0.483 & 0.655 & 0.69 & 0.793 \\ \hline
+	pathchk & 0.762 & 0.905 & 0.905 & 1.0 & head & 0.788 & 0.848 & 0.879 & 0.939 & chown & 0.482 & 0.589 & 0.696 & 0.786 \\ \hline
+	sleep & 0.84 & 0.92 & 0.92 & 1.0 & mktemp & 0.714 & 0.857 & 0.929 & 0.964 & realpath & 0.542 & 0.712 & 0.746 & 0.831 \\ \hline
+	mkfifo & 0.826 & 0.913 & 0.913 & 1.0 & uniq & 0.704 & 0.852 & 0.926 & 0.963 & ptx & 0.619 & 0.738 & 0.881 & 0.952 \\ \hline
+	users & 0.792 & 0.875 & 0.875 & 1.0 & readlink & 0.522 & 0.739 & 0.761 & 0.826 & tail & 0.456 & 0.649 & 0.702 & 0.807 \\ \hline
+	tee & 0.826 & 0.913 & 0.913 & 1.0 & wc & 0.688 & 0.813 & 0.844 & 0.938 & od & 0.519 & 0.635 & 0.654 & 0.712 \\ \hline
+	pwd & 0.682 & 0.864 & 0.909 & 1.0 & tr & 0.533 & 0.733 & 0.833 & 0.9 & split & 0.638 & 0.809 & 0.872 & 0.957 \\ \hline
+	paste & 0.667 & 0.905 & 0.905 & 1.0 & join & 0.6 & 0.733 & 0.867 & 0.967 & stdbuf & 0.571 & 0.81 & 0.857 & 0.929 \\ \hline
+	cksum & 0.8 & 0.92 & 0.92 & 1.0 & rmdir & 0.731 & 0.846 & 0.885 & 0.962 & stat & 0.578 & 0.822 & 0.822 & 0.911 \\ \hline
+	nice & 0.773 & 0.909 & 0.909 & 1.0 & sha224sum & 0.793 & 0.897 & 0.931 & 0.966 & factor & 0.42 & 0.6 & 0.7 & 0.84 \\ \hline
+	nproc & 0.783 & 0.913 & 0.913 & 1.0 & sha256sum & 0.793 & 0.897 & 0.931 & 0.966 & sort & 0.342 & 0.519 & 0.582 & 0.709 \\ \hline
+	expand & 0.75 & 0.917 & 0.917 & 1.0 & sha1sum & 0.778 & 0.852 & 0.926 & 0.963 & df & 0.468 & 0.658 & 0.722 & 0.785 \\ \hline
+	kill & 0.783 & 0.913 & 0.913 & 1.0 & csplit & 0.625 & 0.875 & 0.938 & 0.969 & ls & 0.283 & 0.354 & 0.485 & 0.646 \\ \hline
+	groups & 0.76 & 0.88 & 0.92 & 0.96 & seq & 0.759 & 0.828 & 0.897 & 0.931 & dir & 0.283 & 0.354 & 0.485 & 0.646 \\ \hline
+	unexpand & 0.75 & 0.917 & 0.917 & 1.0 & who & 0.676 & 0.824 & 0.853 & 0.912 & vdir & 0.283 & 0.354 & 0.485 & 0.646 \\ \hline
+	fold & 0.783 & 0.913 & 0.913 & 0.957 & printf & 0.645 & 0.774 & 0.871 & 0.903 & du & 0.375 & 0.591 & 0.682 & 0.761 \\ \hline
+	nohup & 0.76 & 0.92 & 0.92 & 1.0 & cat & 0.686 & 0.886 & 0.914 & 0.943 & mv & 0.427 & 0.562 & 0.697 & 0.775 \\ \hline
+	dircolors & 0.792 & 0.875 & 0.875 & 0.958 & numfmt & 0.621 & 0.724 & 0.862 & 0.897 & cp & 0.444 & 0.644 & 0.744 & 0.833 \\ \hline
+\end{tabular}
+\end{center}
+\end{table*}
+
+
+
+\begin{table*}[h!]
+	\begin{center}
+		\caption{Rank distribution of matched functions, in \texttt{coreutils} binaries, same compiler with different code optimization levels. Functions in \texttt{coreutils} binaries compiled using \texttt{clang} (O3) are used as signature to match semantically  equivalent functions in binaries compiled using \texttt{clang} (O0)\\}
+		\label{tab:x86_gcc_O3_clang_O0}
+		\scriptsize
+\begin{tabular}{ | l | l | l | l | l | l | l | l | l | l | l | l | l | l | l | }
+\hline
+	\  & \  & \  & \  & \  & \  & \  & \  & \  & \  & \  & \  & \  & \  & \  \\ \hline
+	\  & \  & \  & \  & \  & \  & \  & \  & \  & \  & \  & \  & \  & \  & \  \\ \hline
+	Binary & Rank 1 & Top 3 & Top 5 & Top 10 & Binary & Rank 1 & Top 3 & Top 5 & Top 10 & Binary & Rank 1 & Top 3 & Top 5 & Top 10 \\ \hline
+	`true & 0.481 & 0.556 & 0.667 & 0.852 & tac & 0.455 & 0.576 & 0.636 & 0.848 & truncate & 0.348 & 0.5 & 0.609 & 0.717 \\ \hline
+	`false & 0.444 & 0.519 & 0.704 & 0.852 & test & 0.484 & 0.613 & 0.677 & 0.71 & timeout & 0.392 & 0.569 & 0.647 & 0.745 \\ \hline
+	tty & 0.429 & 0.571 & 0.679 & 0.821 & comm & 0.281 & 0.594 & 0.656 & 0.813 & mkdir & 0.422 & 0.556 & 0.622 & 0.756 \\ \hline
+	printenv & 0.429 & 0.5 & 0.679 & 0.786 & mknod & 0.375 & 0.469 & 0.656 & 0.813 & shuf & 0.259 & 0.426 & 0.481 & 0.63 \\ \hline
+	sync & 0.414 & 0.517 & 0.621 & 0.793 & tsort & 0.314 & 0.457 & 0.543 & 0.771 & chmod & 0.254 & 0.343 & 0.463 & 0.642 \\ \hline
+	hostid & 0.414 & 0.517 & 0.621 & 0.828 & fmt & 0.333 & 0.424 & 0.455 & 0.606 & dd & 0.389 & 0.537 & 0.667 & 0.796 \\ \hline
+	unlink & 0.414 & 0.552 & 0.621 & 0.793 & base64 & 0.353 & 0.588 & 0.676 & 0.794 & shred & 0.356 & 0.556 & 0.6 & 0.756 \\ \hline
+	logname & 0.414 & 0.552 & 0.621 & 0.793 & pinky & 0.472 & 0.611 & 0.667 & 0.806 & touch & 0.378 & 0.444 & 0.622 & 0.711 \\ \hline
+	link & 0.414 & 0.517 & 0.586 & 0.828 & chroot & 0.389 & 0.417 & 0.528 & 0.75 & date & 0.375 & 0.525 & 0.6 & 0.75 \\ \hline
+	env & 0.429 & 0.536 & 0.607 & 0.821 & [ & 0.417 & 0.528 & 0.583 & 0.694 & ln & 0.254 & 0.418 & 0.448 & 0.582 \\ \hline
+	dirname & 0.467 & 0.6 & 0.667 & 0.8 & id & 0.361 & 0.444 & 0.556 & 0.694 & sha384sum & 0.472 & 0.528 & 0.667 & 0.833 \\ \hline
+	yes & 0.448 & 0.552 & 0.621 & 0.828 & cut & 0.412 & 0.559 & 0.618 & 0.824 & sha512sum & 0.444 & 0.528 & 0.611 & 0.75 \\ \hline
+	uname & 0.464 & 0.607 & 0.714 & 0.857 & nl & 0.375 & 0.531 & 0.625 & 0.844 & pr & 0.36 & 0.42 & 0.5 & 0.62 \\ \hline
+	whoami & 0.414 & 0.517 & 0.621 & 0.793 & expr & 0.333 & 0.452 & 0.548 & 0.714 & stty & 0.425 & 0.6 & 0.65 & 0.8 \\ \hline
+	echo & 0.464 & 0.536 & 0.643 & 0.857 & md5sum & 0.4 & 0.543 & 0.629 & 0.829 & chcon & 0.29 & 0.435 & 0.551 & 0.667 \\ \hline
+	runcon & 0.429 & 0.536 & 0.607 & 0.821 & sum & 0.385 & 0.564 & 0.615 & 0.821 & chgrp & 0.265 & 0.397 & 0.5 & 0.647 \\ \hline
+	basename & 0.464 & 0.536 & 0.571 & 0.857 & uptime & 0.424 & 0.576 & 0.636 & 0.788 & rm & 0.257 & 0.392 & 0.527 & 0.649 \\ \hline
+	pathchk & 0.429 & 0.536 & 0.536 & 0.786 & head & 0.436 & 0.538 & 0.667 & 0.744 & chown & 0.257 & 0.414 & 0.486 & 0.643 \\ \hline
+	sleep & 0.406 & 0.531 & 0.688 & 0.813 & mktemp & 0.457 & 0.571 & 0.686 & 0.8 & realpath & 0.246 & 0.435 & 0.536 & 0.623 \\ \hline
+	mkfifo & 0.367 & 0.533 & 0.667 & 0.833 & uniq & 0.342 & 0.526 & 0.632 & 0.763 & ptx & 0.321 & 0.446 & 0.589 & 0.696 \\ \hline
+	users & 0.387 & 0.516 & 0.613 & 0.742 & readlink & 0.264 & 0.453 & 0.547 & 0.642 & tail & 0.303 & 0.439 & 0.53 & 0.682 \\ \hline
+	tee & 0.414 & 0.552 & 0.69 & 0.828 & wc & 0.395 & 0.526 & 0.553 & 0.711 & od & 0.344 & 0.459 & 0.525 & 0.689 \\ \hline
+	pwd & 0.429 & 0.5 & 0.571 & 0.821 & tr & 0.417 & 0.528 & 0.611 & 0.75 & split & 0.367 & 0.517 & 0.583 & 0.683 \\ \hline
+	paste & 0.429 & 0.536 & 0.643 & 0.786 & join & 0.25 & 0.475 & 0.575 & 0.7 & stdbuf & 0.333 & 0.519 & 0.611 & 0.704 \\ \hline
+	cksum & 0.424 & 0.545 & 0.667 & 0.788 & rmdir & 0.485 & 0.576 & 0.636 & 0.788 & stat & 0.436 & 0.6 & 0.655 & 0.764 \\ \hline
+	nice & 0.379 & 0.483 & 0.655 & 0.759 & sha224sum & 0.444 & 0.611 & 0.694 & 0.833 & factor & 0.311 & 0.443 & 0.525 & 0.623 \\ \hline
+	nproc & 0.433 & 0.5 & 0.667 & 0.767 & sha256sum & 0.472 & 0.583 & 0.639 & 0.833 & sort & 0.205 & 0.341 & 0.432 & 0.545 \\ \hline
+	expand & 0.419 & 0.581 & 0.645 & 0.839 & sha1sum & 0.457 & 0.543 & 0.657 & 0.8 & df & 0.28 & 0.398 & 0.484 & 0.591 \\ \hline
+	kill & 0.433 & 0.6 & 0.667 & 0.8 & csplit & 0.432 & 0.545 & 0.636 & 0.705 & ls & 0.202 & 0.263 & 0.342 & 0.386 \\ \hline
+	groups & 0.394 & 0.485 & 0.576 & 0.727 & seq & 0.378 & 0.595 & 0.649 & 0.811 & dir & 0.202 & 0.263 & 0.342 & 0.386 \\ \hline
+	unexpand & 0.452 & 0.613 & 0.677 & 0.806 & who & 0.439 & 0.561 & 0.634 & 0.756 & vdir & 0.202 & 0.263 & 0.342 & 0.386 \\ \hline
+	fold & 0.433 & 0.567 & 0.633 & 0.833 & printf & 0.5 & 0.605 & 0.684 & 0.842 & du & 0.245 & 0.33 & 0.472 & 0.575 \\ \hline
+	nohup & 0.455 & 0.576 & 0.667 & 0.788 & cat & 0.348 & 0.587 & 0.652 & 0.739 & mv & 0.286 & 0.375 & 0.464 & 0.571 \\ \hline
+	dircolors & 0.406 & 0.625 & 0.688 & 0.844 & numfmt & 0.385 & 0.487 & 0.538 & 0.718 & cp & 0.248 & 0.358 & 0.468 & 0.578 \\ \hline
+\end{tabular}
+\end{center}
+\end{table*}

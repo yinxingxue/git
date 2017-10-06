@@ -1,0 +1,45 @@
+\documentclass{article}
+\usepackage{pgfplots, pgfplotstable}
+\definecolor{bar1}{RGB}{200, 200, 200}
+\definecolor{bar2}{RGB}{160, 160, 160}
+\definecolor{bar3}{RGB}{120, 120, 120}
+\definecolor{bar4}{RGB}{80, 80, 80}
+\definecolor{bar5}{RGB}{40, 40, 40}
+\definecolor{bar6}{RGB}{0, 0, 0}
+\begin{document}
+\begin{center}
+\begin{tikzpicture}
+
+	\begin{axis}[ybar stacked, 
+	bar width=1.3, 
+	height=0.4\textwidth,
+	width=1\textwidth,
+	ylabel={Correct Matches (\%)},
+	ylabel near ticks,
+	ymin=0,
+	xlabel={Coreutils Utility},
+	xlabel near ticks,	
+	symbolic x coords={du,rm,cp,ls,dir,vdir,tail,readlink,chgrp,ln,chown,mv,chmod,realpath,factor,df,shred,touch,chcon,od,sort,expr,timeout,stdbuf,mkdir,id,shuf,cat,truncate,dd,stat,join,numfmt,pr,expand,[,csplit,ptx,split,yes,sum,date,stty,fmt,chroot,mktemp,wc,dirname,groups,nohup,sync,hostid,unlink,whoami,paste,dircolors,tac,tr,sha384sum,sha512sum,tty,printenv,env,head,sleep,pinky,cut,uniq,true,false,logname,link,uname,basename,cksum,nice,kill,unexpand,comm,mknod,base64,sha1sum,mkfifo,nproc,fold,uptime,pathchk,md5sum,who,pwd,nl,sha224sum,sha256sum,seq,users,printf,runcon,test,echo,tee,tsort,rmdir}]
+	
+	\addplot [color=bar1, fill=bar1] coordinates
+	{(du,0.26)(rm,0.27)(cp,0.27)(ls,0.28)(dir,0.28)(vdir,0.28)(tail,0.29)(readlink,0.3)(chgrp,0.3)(ln,0.32)(chown,0.32)(mv,0.32)(chmod,0.33)(realpath,0.33)(factor,0.33)(df,0.33)(shred,0.34)(touch,0.34)(chcon,0.34)(od,0.34)(sort,0.34)(expr,0.35)(timeout,0.36)(stdbuf,0.36)(mkdir,0.37)(id,0.39)(shuf,0.39)(cat,0.4)(truncate,0.4)(dd,0.4)(stat,0.41)(join,0.42)(numfmt,0.42)(pr,0.42)(expand,0.43)([,0.43)(csplit,0.43)(ptx,0.43)(split,0.43)(yes,0.44)(sum,0.44)(date,0.44)(stty,0.44)(fmt,0.45)(chroot,0.45)(mktemp,0.45)(wc,0.45)(dirname,0.46)(groups,0.46)(nohup,0.46)(sync,0.47)(hostid,0.47)(unlink,0.47)(whoami,0.47)(paste,0.47)(dircolors,0.47)(tac,0.47)(tr,0.47)(sha384sum,0.47)(sha512sum,0.47)(tty,0.48)(printenv,0.48)(env,0.48)(head,0.48)(sleep,0.49)(pinky,0.49)(cut,0.49)(uniq,0.49)(true,0.5)(false,0.5)(logname,0.5)(link,0.5)(uname,0.5)(basename,0.5)(cksum,0.5)(nice,0.5)(kill,0.5)(unexpand,0.5)(comm,0.5)(mknod,0.5)(base64,0.5)(sha1sum,0.5)(mkfifo,0.51)(nproc,0.51)(fold,0.51)(uptime,0.51)(pathchk,0.52)(md5sum,0.52)(who,0.52)(pwd,0.53)(nl,0.53)(sha224sum,0.53)(sha256sum,0.53)(seq,0.53)(users,0.54)(printf,0.54)(runcon,0.55)(test,0.55)(echo,0.56)(tee,0.56)(tsort,0.56)(rmdir,0.59)};
+	
+	\addplot [color=bar2,fill=bar2] coordinates
+	{(du,0.28)(rm,0.32)(cp,0.25)(ls,0.34)(dir,0.34)(vdir,0.34)(tail,0.31)(readlink,0.29)(chgrp,0.32)(ln,0.25)(chown,0.31)(mv,0.22)(chmod,0.31)(realpath,0.24)(factor,0.35)(df,0.26)(shred,0.36)(touch,0.29)(chcon,0.3)(od,0.41)(sort,0.29)(expr,0.36)(timeout,0.27)(stdbuf,0.33)(mkdir,0.19)(id,0.35)(shuf,0.28)(cat,0.31)(truncate,0.25)(dd,0.34)(stat,0.31)(join,0.35)(numfmt,0.28)(pr,0.27)(expand,0.3)([,0.25)(csplit,0.27)(ptx,0.27)(split,0.29)(yes,0.27)(sum,0.3)(date,0.24)(stty,0.28)(fmt,0.28)(chroot,0.31)(mktemp,0.28)(wc,0.25)(dirname,0.25)(groups,0.28)(nohup,0.19)(sync,0.21)(hostid,0.21)(unlink,0.24)(whoami,0.24)(paste,0.29)(dircolors,0.29)(tac,0.24)(tr,0.27)(sha384sum,0.22)(sha512sum,0.22)(tty,0.25)(printenv,0.22)(env,0.25)(head,0.27)(sleep,0.16)(pinky,0.27)(cut,0.22)(uniq,0.31)(true,0.19)(false,0.19)(logname,0.21)(link,0.21)(uname,0.24)(basename,0.24)(cksum,0.25)(nice,0.24)(kill,0.22)(unexpand,0.25)(comm,0.28)(mknod,0.25)(base64,0.29)(sha1sum,0.24)(mkfifo,0.18)(nproc,0.23)(fold,0.25)(uptime,0.22)(pathchk,0.24)(md5sum,0.19)(who,0.28)(pwd,0.22)(nl,0.25)(sha224sum,0.18)(sha256sum,0.18)(seq,0.26)(users,0.19)(printf,0.22)(runcon,0.21)(test,0.18)(echo,0.18)(tee,0.19)(tsort,0.14)(rmdir,0.2)};
+	
+	\addplot [color=bar3,fill=bar3] coordinates
+	{(du,0.17)(rm,0.1)(cp,0.14)(ls,0.13)(dir,0.13)(vdir,0.13)(tail,0.13)(readlink,0.11)(chgrp,0.12)(ln,0.15)(chown,0.1)(mv,0.16)(chmod,0.09)(realpath,0.14)(factor,0.06)(df,0.12)(shred,0.05)(touch,0.08)(chcon,0.1)(od,0.06)(sort,0.12)(expr,0.06)(timeout,0.07)(stdbuf,0.07)(mkdir,0.13)(id,0.02)(shuf,0.13)(cat,0.04)(truncate,0.1)(dd,0.05)(stat,0.08)(join,0.04)(numfmt,0.07)(pr,0.09)(expand,0)([,0.09)(csplit,0.02)(ptx,0.03)(split,0.05)(yes,0.05)(sum,0.05)(date,0.08)(stty,0.04)(fmt,0.09)(chroot,0.03)(mktemp,0.09)(wc,0.07)(dirname,0.09)(groups,0.06)(nohup,0.08)(sync,0.11)(hostid,0.08)(unlink,0.05)(whoami,0.05)(paste,0.09)(dircolors,0.06)(tac,0.08)(tr,0.07)(sha384sum,0.04)(sha512sum,0.04)(tty,0.06)(printenv,0.09)(env,0.03)(head,0.02)(sleep,0.11)(pinky,0.07)(cut,0.09)(uniq,0.04)(true,0.06)(false,0.06)(logname,0.05)(link,0.05)(uname,0.02)(basename,0.02)(cksum,0.03)(nice,0.08)(kill,0.09)(unexpand,0)(comm,0.05)(mknod,0.03)(base64,0.04)(sha1sum,0.05)(mkfifo,0.11)(nproc,0.09)(fold,0.02)(uptime,0.03)(pathchk,0.06)(md5sum,0.05)(who,0.03)(pwd,0.06)(nl,0.02)(sha224sum,0.07)(sha256sum,0.07)(seq,0.02)(users,0.03)(printf,0.04)(runcon,0.06)(test,0.07)(echo,0.08)(tee,0.06)(tsort,0.07)(rmdir,0.03)};
+		
+	\addplot [color=bar4,fill=bar4] coordinates
+	{(du,0.12)(rm,0.11)(cp,0.16)(ls,0.15)(dir,0.15)(vdir,0.15)(tail,0.11)(readlink,0.14)(chgrp,0.08)(ln,0.11)(chown,0.08)(mv,0.12)(chmod,0.09)(realpath,0.13)(factor,0.18)(df,0.1)(shred,0.14)(touch,0.15)(chcon,0.1)(od,0.12)(sort,0.09)(expr,0.13)(timeout,0.18)(stdbuf,0.12)(mkdir,0.14)(id,0.13)(shuf,0.06)(cat,0.13)(truncate,0.15)(dd,0.11)(stat,0.1)(join,0.08)(numfmt,0.11)(pr,0.11)(expand,0.13)([,0.12)(csplit,0.11)(ptx,0.19)(split,0.13)(yes,0.12)(sum,0.14)(date,0.14)(stty,0.14)(fmt,0.09)(chroot,0.1)(mktemp,0.07)(wc,0.14)(dirname,0.11)(groups,0.11)(nohup,0.19)(sync,0.09)(hostid,0.12)(unlink,0.09)(whoami,0.09)(paste,0.09)(dircolors,0.13)(tac,0.13)(tr,0.12)(sha384sum,0.16)(sha512sum,0.16)(tty,0.12)(printenv,0.15)(env,0.18)(head,0.14)(sleep,0.13)(pinky,0.12)(cut,0.15)(uniq,0.08)(true,0.16)(false,0.16)(logname,0.15)(link,0.15)(uname,0.12)(basename,0.15)(cksum,0.11)(nice,0.09)(kill,0.11)(unexpand,0.14)(comm,0.06)(mknod,0.14)(base64,0.07)(sha1sum,0.14)(mkfifo,0.11)(nproc,0.08)(fold,0.17)(uptime,0.14)(pathchk,0.09)(md5sum,0.17)(who,0.1)(pwd,0.11)(nl,0.13)(sha224sum,0.11)(sha256sum,0.11)(seq,0.1)(users,0.13)(printf,0.09)(runcon,0.09)(test,0.13)(echo,0.09)(tee,0.08)(tsort,0.09)(rmdir,0.1)};
+	
+	\addplot [color=bar5,fill=bar5] coordinates
+	{(du,0.1)(rm,0.14)(cp,0.12)(ls,0.07)(dir,0.07)(vdir,0.07)(tail,0.15)(readlink,0.13)(chgrp,0.13)(ln,0.14)(chown,0.14)(mv,0.11)(chmod,0.13)(realpath,0.11)(factor,0.05)(df,0.14)(shred,0.09)(touch,0.1)(chcon,0.11)(od,0.06)(sort,0.11)(expr,0.1)(timeout,0.07)(stdbuf,0.07)(mkdir,0.17)(id,0.11)(shuf,0.11)(cat,0.1)(truncate,0.08)(dd,0.07)(stat,0.08)(join,0.09)(numfmt,0.12)(pr,0.11)(expand,0.14)([,0.09)(csplit,0.15)(ptx,0.05)(split,0.08)(yes,0.12)(sum,0.07)(date,0.08)(stty,0.08)(fmt,0.09)(chroot,0.11)(mktemp,0.11)(wc,0.09)(dirname,0.09)(groups,0.09)(nohup,0.08)(sync,0.12)(hostid,0.12)(unlink,0.15)(whoami,0.15)(paste,0.06)(dircolors,0.05)(tac,0.08)(tr,0.07)(sha384sum,0.11)(sha512sum,0.11)(tty,0.09)(printenv,0.06)(env,0.06)(head,0.09)(sleep,0.11)(pinky,0.05)(cut,0.05)(uniq,0.06)(true,0.09)(false,0.09)(logname,0.09)(link,0.09)(uname,0.12)(basename,0.09)(cksum,0.11)(nice,0.09)(kill,0.08)(unexpand,0.11)(comm,0.11)(mknod,0.08)(base64,0.1)(sha1sum,0.07)(mkfifo,0.09)(nproc,0.09)(fold,0.05)(uptime,0.1)(pathchk,0.09)(md5sum,0.07)(who,0.07)(pwd,0.08)(nl,0.07)(sha224sum,0.11)(sha256sum,0.11)(seq,0.09)(users,0.11)(printf,0.09)(runcon,0.09)(test,0.05)(echo,0.09)(tee,0.11)(tsort,0.14)(rmdir,0.08)};
+		
+	\addplot [color=bar6,fill=bar6] coordinates
+	{(du,0.07)(rm,0.06)(cp,0.06)(ls,0.03)(dir,0.03)(vdir,0.03)(tail,0.01)(readlink,0.03)(chgrp,0.05)(ln,0.03)(chown,0.05)(mv,0.07)(chmod,0.05)(realpath,0.05)(factor,0.03)(df,0.05)(shred,0)(touch,0.04)(chcon,0.05)(od,0)(sort,0.03)(expr,0)(timeout,0.05)(stdbuf,0.05)(mkdir,0)(id,0)(shuf,0.03)(cat,0.02)(truncate,0.02)(dd,0.03)(stat,0.02)(join,0.02)(numfmt,0)(pr,0)(expand,0)([,0.02)(csplit,0.02)(ptx,0.03)(split,0.02)(yes,0)(sum,0)(date,0.02)(stty,0.02)(fmt,0)(chroot,0)(mktemp,0)(wc,0)(dirname,0)(groups,0)(nohup,0)(sync,0)(hostid,0)(unlink,0)(whoami,0)(paste,0)(dircolors,0)(tac,0)(tr,0)(sha384sum,0)(sha512sum,0)(tty,0)(printenv,0)(env,0)(head,0)(sleep,0)(pinky,0)(cut,0)(uniq,0.02)(true,0)(false,0)(logname,0)(link,0)(uname,0)(basename,0)(cksum,0)(nice,0)(kill,0)(unexpand,0)(comm,0)(mknod,0)(base64,0)(sha1sum,0)(mkfifo,0)(nproc,0)(fold,0)(uptime,0)(pathchk,0)(md5sum,0)(who,0)(pwd,0)(nl,0)(sha224sum,0)(sha256sum,0)(seq,0)(users,0)(printf,0.02)(runcon,0)(test,0.02)(echo,0)(tee,0)(tsort,0)(rmdir,0)};
+	\end{axis}
+
+\end{tikzpicture}
+\end{center}
+\end{document}

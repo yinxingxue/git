@@ -1,0 +1,199 @@
+-ftrapv:
+sub	esp, 8
+push	edx
+push	eax
+call	__addvsi3  || call	__subvsi3 ||  call	__mulvsi3 
+add	esp, 16
+-o:
+add	eax, edx  ||  	sub	edx, eax; mov	eax, edx  || imul	eax, edx
+For every =/-/* operation
+
+
+
+-fstack-check
+lea	esp, [esp-4148]  
+or	DWORD PTR [esp], 0  //check whether the space can be used
+lea	esp, [esp+4112]
+-o
+sub	esp, 36
+
+
+
+-fcall-saved-reg  reg=ecx
+push ecx
+pop ecx
+-o 
+nothing
+-fcall-used-reg oppoiste
+
+
+
+-ffixed-eax
+no eax used
+
+
+-fshort-double
+fld[s]
+-o
+fld[l]
+*the esp change according to the double/single, if its a varible
+
+
+
+-fshort-wchar
+	.string	" "
+	.string	"W"
+	.string	"o"
+	.string	"r"
+	.string	"l"
+	.string	"d"
+	.string	""
+	.string	""
+	mov	eax, DWORD PTR .LC0
+	mov	DWORD PTR [ebp-80], eax
+	mov	eax, DWORD PTR .LC0+4
+	mov	DWORD PTR [ebp-76], eax
+	mov	eax, DWORD PTR .LC0+8
+	mov	DWORD PTR [ebp-72], eax
+	lea	edx, [ebp-68]
+-o
+	.string	" "
+	.string	""
+	.string	""
+	.string	"W"
+	.string	""
+	.string	""
+	.string	"o"
+	.string	""
+	.string	""
+	.string	"r"
+	.string	""
+	.string	""
+	.string	"l"
+	.string	""
+	.string	""
+	.string	"d"
+	.string	""
+	.string	""
+	.string	""
+	.string	""
+	.string	""
+	.string	""
+	mov	eax, DWORD PTR .LC0
+	mov	DWORD PTR [ebp-144], eax
+	mov	eax, DWORD PTR .LC0+4
+	mov	DWORD PTR [ebp-140], eax
+	mov	eax, DWORD PTR .LC0+8
+	mov	DWORD PTR [ebp-136], eax
+	mov	eax, DWORD PTR .LC0+12
+	mov	DWORD PTR [ebp-132], eax
+	mov	eax, DWORD PTR .LC0+16
+	mov	DWORD PTR [ebp-128], eax
+	mov	eax, DWORD PTR .LC0+20
+	mov	DWORD PTR [ebp-124], eax
+	lea	edx, [ebp-120]
+*the esp change according to the the length, if its a varible
+*all the load function may needs more iteration
+
+
+
+-fshort-enums
+	mov	BYTE PTR [ebp-9], 3
+	movzx	eax, BYTE PTR [ebp-9]
+-o
+	mov	DWORD PTR [ebp-12], 3
+	mov	eax, DWORD PTR [ebp-12]
+
+
+
+
+-fverbose-asm
+-frecord-gcc-switches
+at the header file 
+ 26 .GCC.command.line 0000008e  00000000  00000000  0000106d  2**0
+                  CONTENTS, READONLY
+
+
+-fno-common
+*this is for building/linking the files. no difference if the file is successfully built
+
+-fno-ident
+Ignore the #ident directive.
+
+
+-fpic
+push	ebx
+....
+call	__x86.get_pc_thunk.bx	
+late
+sub	esp, 8
+	lea	eax, -16[ebp]
+	push	eax
+	lea	eax, .LC0@GOTOFF[ebx]
+	push	eax
+	call	scanf@PLT
+	add	esp, 16
+-o 
+no call to __x86.get_pc_thunk.bx
+* all the subsequence call are affected	
+
+
+-fpack-struct
+x:
+	.zero	12
+y:
+	.zero	8
+-o
+x:
+	.zero	8
+y:
+	.zero	6
+*all the reference offset will be different
+
+-finstrument-functions
+-finstrument-functions-exclude-file-list=file,file,...
+-finstrument-functions-exclude-function-list=sym,sym,...
+	push	ebx
+	sub	esp, 4
+	mov	eax, DWORD PTR [ebp+4]
+	sub	esp, 8
+	push	eax
+	push	OFFSET FLAT:go()
+	call	__cyg_profile_func_enter
+
+	mov	ebx, 5
+	mov	eax, DWORD PTR [ebp+4]
+	sub	esp, 8
+	push	eax
+	push	OFFSET FLAT:go()
+	call	__cyg_profile_func_exit
+	add	esp, 16
+	mov	eax, ebx
+	mov	ebx, DWORD PTR [ebp-4]
+	leave
+	ret
+-o
+	pop	ebp
+	ret
+
+-fno-plt
+*cannot use it in gcc
+
+-fleading-underscore
+__Z2gov:
+call	__Z2gov
+-o
+go():
+call go
+
+
+-fsplit-stack
+	cmp	esp, DWORD PTR %gs:48
+	jnb	.L3
+	push	0
+	push	4
+	call	__morestack
+	ret
+*every function has this section to check the stack avaibility
+
+

@@ -1,0 +1,134 @@
+%\renewcommand{\algorithmicrequire}{ \textbf{Input:}} %Use Input in the format of Algorithm
+%\renewcommand{\algorithmicensure}{ \textbf{Output:}} %UseOutput in the format of Algorithm
+%\newcommand{\beh}{behavior\xspace}
+%\newcommand{\Beh}{Behavior\xspace}
+%\newcommand{\behs}{behaviors\xspace}
+%\newcommand{\Behs}{Actions\xspace}
+%\newcommand{\aly}{analyze\xspace}
+%\newcommand{\alys}{analyzes\xspace}
+%\newcommand{\tool}{\textsc{AttackClone}\xspace}
+%\newcommand{\graph}{Attack Graph\xspace}
+%\def\WithComments{}
+\ifdefined \WithComments
+	\newcommand{\xyx}[1]{\textcolor{red}{#1}}
+    \newcommand{\wjj}[1]{\textcolor{blue}{\textbf{ToChange: #1}}}
+    \newcommand{\ly}[1]{\textcolor{darkred}{\textbf{#1}}}
+\else
+	\newcommand{\xyx}[1]{\textcolor{black}{#1}}
+    \newcommand{\wjj}[1]{}
+    \newcommand{\ly}[1]{}
+\fi
+\newcommand{\todo}[1]{\textbf{\textcolor{cyan}{TODO: #1}}}
+\newcommand{\note}[1]{\textcolor{red}{#1}}
+\newcommand{\mahin}[1]{\textcolor{blue}{#1}}
+%\newcommand{\comment}[1]{\textbf{\textcolor{green}{Comment: #1}}}
+\newcommand{\alarm}[1]{\textbf{\textcolor{red}{Alarm: #1}}}
+\newcommand{\deprecate}[1]{\textbf{\textcolor{red}{\{Deprecated: #1\}}}}
+\newcommand{\question}[1]{\textbf{\textcolor{blue}{Question: #1}}}
+\newcommand{\remove}[1]{}
+\newcommand{\leftmapsto}{\leftarrow\!\shortmid}
+\newcommand{\pluseq}{\mathrel{+}=}
+
+%\st{overstriking}
+\newcommand*\widefbox[1]{\fbox{\hspace{2em}#1\hspace{2em}}}
+
+
+%\setitemize[0]{leftmargin=10pt}
+\newcommand{\fonttt}[1]{\begin{ttfamily}#1\end{ttfamily}}
+\setitemize[0]{leftmargin=10pt}
+
+\newtheorem{mydef}{\textbf{Definition}}%[section]
+\definecolor{pblue}{rgb}{0.13,0.13,1}
+\definecolor{pgreen}{rgb}{0,0.5,0}
+\definecolor{pred}{rgb}{0.9,0,0}
+\definecolor{pgray}{rgb}{0.46,0.45,0.48}
+\definecolor{ppurple}{rgb}{1,0.2,1}
+\definecolor{pblack}{rgb}{0,0,0}
+\lstset{
+	basicstyle=\scriptsize\tt,
+	tabsize=4,
+	showstringspaces=false,
+	columns=flexible,
+	commentstyle=\color{pgreen},
+  	keywordstyle=\color{pblue},
+  	stringstyle=\color{ppurple},
+	breaklines=true,
+	language=Java,
+    showspaces=false,
+    numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+    numbersep=5pt,                   % how far the line-numbers are from the code
+    numberstyle=\tiny\color{pblack} % the style that is used for the line-numbers
+}
+
+\makeatletter
+\newcommand*{\da@rightarrow}{\mathchar"0\hexnumber@\symAMSa 4B }
+\newcommand*{\da@leftarrow}{\mathchar"0\hexnumber@\symAMSa 4C }
+\newcommand*{\xdashrightarrow}[2][]{%
+  \mathrel{%
+    \mathpalette{\da@xarrow{#1}{#2}{}\da@rightarrow{\,}{}}{}%
+  }%
+}
+\newcommand{\xdashleftarrow}[2][]{%
+  \mathrel{%
+    \mathpalette{\da@xarrow{#1}{#2}\da@leftarrow{}{}{\,}}{}%
+  }%
+}
+\newcommand*{\da@xarrow}[7]{%
+  % #1: below
+  % #2: above
+  % #3: arrow left
+  % #4: arrow right
+  % #5: space left
+  % #6: space right
+  % #7: math style
+  \sbox0{$\ifx#7\scriptstyle\scriptscriptstyle\else\scriptstyle\fi#5#1#6\m@th$}%
+  \sbox2{$\ifx#7\scriptstyle\scriptscriptstyle\else\scriptstyle\fi#5#2#6\m@th$}%
+  \sbox4{$#7\dabar@\m@th$}%
+  \dimen@=\wd0 %
+  \ifdim\wd2 >\dimen@
+    \dimen@=\wd2 %
+  \fi
+  \count@=2 %
+  \def\da@bars{\dabar@\dabar@}%
+  \@whiledim\count@\wd4<\dimen@\do{%
+    \advance\count@\@ne
+    \expandafter\def\expandafter\da@bars\expandafter{%
+      \da@bars
+      \dabar@
+    }%
+  }%
+  \mathrel{#3}%
+  \mathrel{%
+    \mathop{\da@bars}\limits
+    \ifx\\#1\\%
+    \else
+      _{\copy0}%
+    \fi
+    \ifx\\#2\\%
+    \else
+      ^{\copy2}%
+    \fi
+  }%
+  \mathrel{#4}%
+}
+\makeatother
+
+
+%%%%%%%%%%%%%%%%%%COMMANDS TO REDUCE THE SPACE%%%%%%%%%%%%%%%%%%%%%
+%\addtolength{\parskip}{-1mm}
+%\addtolength{\floatsep}{-6mm}
+%\addtolength{\textfloatsep}{-6mm}
+%\addtolength{\abovecaptionskip}{-0.5mm}
+%\addtolength{\belowcaptionskip}{-0.5mm}
+%Source: http://tex.stackexchange.com/questions/60216/how-to-create-a-squiggle-arrow-with-some-text-on-it-in-tikz
+\newcounter{sarrow}
+\newcommand\xrsquigarrow[1]{%
+\stepcounter{sarrow}%
+\mathrel{\begin{tikzpicture}[baseline= {( $ (current bounding box.south) + (0,-0.5ex) $ )}]
+\node[inner sep=.5ex] (\thesarrow) {$\scriptstyle #1$};
+\path[draw,<-,decorate,
+  decoration={zigzag,amplitude=0.7pt,segment length=1.2mm,pre=lineto,pre length=4pt}]
+    (\thesarrow.south east) -- (\thesarrow.south west);
+\end{tikzpicture}}%
+}
+

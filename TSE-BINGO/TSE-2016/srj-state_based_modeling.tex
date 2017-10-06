@@ -1,0 +1,413 @@
+%\section{Semantic Modelling} \label{sec:sem_mod}
+%%These code properties act as contextual information for the vulnerability.
+%
+%%\todo {\color{blue} Define code property and explain each of the following in details with some examples.}
+%Due to the dramatic difference in the syntax representations of the binary generated from different compilers, architectures and platforms, \tool leverage on two types of semantic models
+%%, generated from partial traces,
+%to extract semantic features: (1) state-based semantic model and (2) abstract semantic model. As discussed later, each model complement each other on extracting semantic features, which are later fed into the machine learning framework. State-based semantic model gives the low-level perspective of the function (e.g., the effect of a function on the memory, flags and registers), whereas abstract-semantic model gives the high-level understanding of the function (e.g., the high-level operations carried out by the function). In the following sub sections, we'll elaborate on them in detail.
+%%These complementing features summarize the behavior of the same binary code at different levels to achieve an accurate and yet robust matching cross compilers, architectures and platforms.
+%%under investigation so that they complement each other and give better understanding of the program.
+%%On the other hand, syntactic features try to explain the high-level behavioural aspects of the binary code (e.g., type of operation carried out, such as data movement or arithmetic operation).
+
+
+\section{State-based Semantic Modeling} \label{subsec:stat_sem}
+To compute the semantic similarity, we adopt the state-based semantic model~\cite{luo2014semantics,DBLP:conf/sp/PewnyGGRH15}, which aims to capture the execution effect of the binary code in terms of machine state updates.
+%In this section, we explain the choice of state machine, state transitions during program execution, and the corresponding state-based semantic models.
+In this work, we use a RISC-like intermediate representation (IR) to lift the assembly instructions of different architectures to a common representation, which enables us to perform architecture independent analysis.
+%\subsection{Machine State Transition Rules} \label{subsubsec:mach_stat}
+To begin with, we explain the machine state transition rules based on the basic machine mentioned in Section~\ref{subsec:bin_pre}.
+%(adapted from~\cite{de2015micro}) with a fixed set of general-purpose registers, condition-code flag registers and a program counter (\textit{pc}) register.
+We list the RISC-like instruction set in the following. %, which features a small set of instructions that is sufficient to represent a program.
+%\subsubsection*{Simple Machine} \label{subsubsubsec:bas_mach}
+\begin{equation*}
+\small
+\begin{split}
+inst ::= &~~\mathsf{Mov} \: r_s\, r_d\; \vert \; \mathsf{Binop_\otimes} \: r_1\, r_2\, r_d\; \vert \; \mathsf{Load} \: r_p\, r_d\; \vert \; \mathsf{Store} \: r_p\, r_s \; \vert \;\\
+&~~ \mathsf{Jump} \: r \; \vert \; \mathsf{Jal} \: r \; \vert \; \mathsf{Nop} \; \vert \; \mathsf{Const} \: r \; r_d \; \vert \; \mathsf{Halt}
+\end{split}
+\end{equation*}
+where $\mathsf{Mov} \: r_s\, r_d$ copies the content of register $r_s$ to the register $r_d$; $\mathsf{Binop_\otimes}$ refers to binary operations (i.e., $\otimes \in \lbrace \div, \times, \leq, \geq, \ldots\rbrace$);  $\mathsf{Jump}$ and $\mathsf{Jal}$ (Jump-and-link) are unconditional jumps, and $\mathsf{Const} \: r \; r_d$ puts an immediate value (or constant) $i$ into register $r_d$. $\mathsf{Jal}$ is used to implement subroutine calls.
+
+Recall that a machine state is a tuple $(mem, reg, flag, pc)$.
+%of memory \textit{mem} (a partial function that maps memory locations to values), a set of general-purpose registers \textit{reg} (a function that maps register names to values), a set of condition-code flags \textit{flag} (a function that maps flags names to values) and a program counter $pc$.
+In the original formalization~\cite{de2015micro}, \textit{flag} is not considered as part of a machine state. However, our models are generated from partial traces (discussed in Section \ref{subsec:partial_trace}). Hence, it is essential to consider the state of condition-code flags (e.g., $cf, pf, \ldots$ in x86 and  $zf, vf, \ldots$ in ARM) in semantic similarity computation. %This is consistent with the recently proposed state-based cross-architecture semantic modelling technique~\cite{DBLP:conf/sp/PewnyGGRH15}.
+For example, at a given program point, across two different binary functions, if the state of condition-code flags is identical then it is an indication\footnote{\small
+Having identical condition-code flags is the sufficient but not necessary condition for the two binary code segments to be semantically similar.} %This is just one of many factors that need to be considered for similarity matching. That is, having identical condition-code flags doesn't not guarantee that those two binary code segments are similar or identical.
+ that these two functions perform similar operations at the machine-code level.  It is noted that the memory is a partial function; trying to access addresses outside of the valid memory halts the machine~\cite{de2015micro}.
+
+The execution of an instruction leads to the transition of the states. As an example, we explain one of the transition  rules for $\mathsf{Binop}$ instruction. The complete set of machine state transition rules can be found in~\cite{de2015micro}.
+\begin{equation*}
+\small
+\begin{aligned}
+\mathnormal{\frac{ \splitfrac{mem[pc]=i \quad decode \: i = \; \mathsf{Binop_\otimes} \: r_1\, r_2\, r_d\,f_d \quad reg[r_1]=w_1}{\splitfrac{reg[r_2]=w_2 \quad reg^\prime = reg[r_d \leftarrow w_1 \otimes w_2]}{flag^\prime = flag[f_d \leftarrow w_1 \otimes w_2]\hfill}\hfill \mathsf{(Binop)}}}{( mem, reg, flag, pc) \rightarrow
+( mem, reg^\prime, flag^\prime, pc+1)}}
+\end{aligned}
+\end{equation*}
+
+%The $\mathsf{Binop}$ transition rule is presented above. \note{
+Looking up the memory at address \textit{pc} yields the instruction \textit{i} (an element of the \textit{inst} set defined above) via a partial function \textit{decode}. In this case, the instruction is $\mathsf{Binop_\otimes} \: r_1\, r_2\, r_d$. Registers $r_1$ and $r_2$ contain the operands $w_1$ and $w_2$, respectively. The notation $reg[r_d \leftarrow w_1 \otimes w_2]$ denotes the partial function that maps $r_d$ to $w_1 \otimes w_2$ and behaves like $reg$ on all other arguments. Similarly, $flag[f_d \leftarrow w_1 \otimes w_2]$ denotes the partial function that maps the flag $f_d$ to the side-effect  (if any) of $w_1 \otimes w_2$ on the conditional flags. The next machine state is calculated by updating the registers and conditional flag files, incrementing the $pc$ by 1, and leaving the memory unchanged. For example, assume zero-flag is set to 0 ($\mathtt{zf\;=\;0}$) and the registers $\mathtt{eax}$ and $\mathtt{ebx}$ hold the values $\mathtt{1}$ and $\mathtt{- 1}$ respectively, the execution of an instruction `$\mathtt{add\;eax, ebx}$' (binary operation) leads to following state: $\mathtt{eax}$ now holds the value 0 (i.e., $1\mapsto0$); zero-flag is set to 1 (i.e., $0\mapsto1$); the program counter is incremented; memory, all other registers and flags are unchanged.
+%\note{Similarly, we can write the transition rules for other instructions, we refer the readers to }.
+
+%The transition rule for $\mathsf{Store}$ instruction is written as follows:
+%\begin{equation*}
+%\small
+%\begin{aligned}
+%\mathnormal{\frac{ \splitfrac{mem[pc]=i \quad decode \: i = \; \mathsf{Store} \: r_p\, r_s \quad reg[r_p]=w_p}{reg[r_s]=w_s \quad mem^\prime = mem[w_p \leftarrow w_s] \hfill}\mathsf{(Store)}}{(mem, reg, flag, pc) \rightarrow (mem^\prime, reg, flag, pc+1)}}
+%\end{aligned}
+%\end{equation*}
+%This rule stores the value contained in the register $r_s$ in the memory location pointed to by the register $r_p$. The next state is calculated by updating the memory, incrementing the $pc$ and leaving the register and conditional flag files unchanged.
+
+%\note{It is important to note that the subroutine calls are, in general, implemented using unconditional jump instructions. In our primitive machine, it is implemented using $\mathsf{Jal}$ (Jump-and-link)}
+
+%Similarly, we can write the transition rules for other instructions, as shown in the Appendix.
+
+%\todo{Should I include the step rules for all instructions supported by REIL IR?}
+%\todo{Write a step rule that modifies the }
+
+%\ly{why need QFBV?}
+%\subsection{I/O Formula Extraction}
+%\note{The updates made by partial traces on the machine state (as shown by the state transition rule(s) in section~\ref{subsubsec:mach_stat}) are represented by a set of \emph{symbolic expressions}.
+%Symbolic expression of an instruction sequence is a 2-vocabulary formula that specifies the machine state transition~\cite{Srinivasan2015synthesis}, where unprimed vocabulary (e.g., $\emph{eax}$) represents the \emph{pre-state} and the primed vocabulary (e.g., $\emph{eax}^\prime$) represents the \emph{post-state}.
+%Here, pre-state refers to a machine state before executing an instruction sequence and post-state refers to a machine state after executing the instruction sequence.
+%(i.e., $\langle$pre-state$\rangle \rightarrow \langle$post-state$\rangle$)
+%\subsection{I/O Formula Extraction}
+
+Note that in static analysis, programs are not physically or virtually executed, and hence the machine state transitions can be represented in the symbolic form as %, where the machine artifacts (i.e., memory, registers, flag and program counter) take the symbolic values in both pre- and post-states.
+%In general, the primed symbolic values are used to represent the machine artefacts in post-state and the unprimed ones represent the  machine artefacts in pre-state.
+symbolic expressions~\cite{DBLP:conf/sp/PewnyGGRH15,pewny2014leveraging}, which are 2-vocabulary formulas that specify the symbolic machine state transitions of a partial trace,
+where unprimed vocabulary (e.g., $\emph{eax}$) represents the machine artifacts in the \emph{pre-state} and the primed vocabulary (e.g., $\emph{eax}^\prime$) represents the machine artifacts in the \emph{post-state}.
+
+Therefore, the updates made by partial traces on the machine state are represented by a set of symbolic expressions. %}, where the function $\langle\!\langle \bullet \rangle\!\rangle$ converts a partial trace into a set of symbolic expressions.
+ %The methodology for this conversion can be found elsewhere \cite{lim2011symbolic}.
+Note that in the symbolic expressions used in \tool, the state transition of the program counter \emph{pc} (i.e., $pc^\prime = pc+1$) is omitted as it does not contribute to comparing two different programs.
+%Hence, we generate symbolic expressions for the entire partial trace, but state of \textit{pc} plays an insignificant role in semantic matching.
+As a result, in \tool, the machine state is essentially characterised by the rest three major machine artifacts and represented as a triple $(mem, reg, flag)$.
+% such as memory \emph{mem}, general-purpose registers \emph{reg} and condition-code flags \emph{flag}
+
+%\ly{the definition above is very unclear, and need example. what does the capital letter EXP mean? different from small exp?}
+%\ly{don't understand, the following function is taking a instruction or a inst sequence? your example is single instruction = I hope  its clear now.. $\langle\!\langle inst \rangle\!\rangle$ is a general function that can take 1 instruction or a sequence, I have updated the example to reflect that}
+
+The symbolic expressions extracted for two partial traces are given in Fig.~\ref{fig:example-qfbv}.
+%The first instruction loads the value in the memory location pointed to by the base-pointer (i.e.,  $\mathtt{ebp}$) to the  $\mathtt{eax}$ register.
+The first partial trace consists of only one instruction, where it pushes a 32-bit constant value 0 on the stack. The second partial trace consists of two instructions, which loads the value in the memory location pointed to by the base-pointer (i.e.,  $\mathtt{ebp}$) into the  $\mathtt{ecx}$ register followed by loading $\mathtt{eax}$ register with the value  $\mathtt{ebp+4}$.
+%without modifying the value of any flag).
+
+
+
+\begin{figure}[t]
+\begin{center}\vspace{-1mm}
+\small
+%\scriptsize
+\begin{enumerate}
+ % \item[] $\mathtt{\langle\!\langle mov \;\; eax, [ebp]\rangle\!\rangle\equiv eax^\prime = Mem(ebp)}$
+ \item $\mathtt{\langle\!\langle push \;\; 0\rangle\!\rangle\equiv esp^\prime=esp-4 \wedge Mem^\prime = Mem[esp-4\mapsto 0]}$
+  \item $\mathtt{\langle\!\langle  mov \;\; ecx, [ebp];\; lea \;\; eax, [ebp+4]\rangle\!\rangle}$ $\mathtt{\equiv ecx^\prime = Mem(ebp) \wedge eax^\prime = ebp + 4} $
+\end{enumerate}
+~\\
+\vspace{-4mm}
+\caption{Symbolic expression for example IA-32 instructions }
+\label{fig:example-qfbv}
+\vspace{-2mm}
+\end{center}
+\end{figure}
+
+%Functions, in a real-world program, can easily have several thousand instructions and hence, it is not practical, in terms of scalability, to compare \note{symbolic expressions generated from} each instruction in the signature function with the target function. Further, comparison of single instructions will result in high false positive rate, where an instruction can be too common and too small to capture the underlying function semantics.  For example, the instruction \texttt{mov eax, [ebp]}, in its own, does not tell anything about the function and can appear in functions that are totally dissimilar.  Therefore, in \tool, we capture the effect of each partial trace (not single instruction) has on the machine state
+%%register, flag and memory locations written to or updated
+%during execution.
+
+%\ly{the following definition is important, and also need to link and consistent with Definition 1. also the partial trace, assembly code seg, instruction sequences, all same? better be consistent.}
+
+Interestingly, partial traces (or even basic-blocks), in general, read values (called \emph{inputs}) from multiple registers, flags and memory locations and write values (called \emph{outputs}) to multiple registers, flags and memory locations during execution. That is, a partial trace, in general, performs the following three tasks: (1) read values from a set of machine artifacts $M_a$, (2) do some transformations, and (3) write values back to a set of machine artifacts ${M_a}^\prime$. Here, values of machine artifacts ${M_a}^\prime$ need not be same as the initial values of machine artifacts ${M_a}$. From the definition of machine state transition in Section~\ref{sec:prob_state}, we can see that the values read by partial trace constitutes the pre-state values and the values written back constitutes the post-state values. However,
+%from the Definition~\ref{def:sym_exp} (in Section~\ref{sec:prob_state}),
+we can find that symbolic expression models the machine state transitions in symbolic mode.
+%captures the relationship between symbolic pre-state machine artefacts and symbolic post-state machine artefacts.
+Hence, by using symbolic expression, we extract the relationship between symbolic pre- and post-state values. That is, from the symbolic expression, output vocabularies (symbolic output values or symbolic post-state values) are identified and written in-terms of input vocabularies (symbolic input values or symbolic pre-state values), called \emph{I/O formulae}.
+
+For example, from the symbolic expression generated from the second partial trace, shown in Fig.~\ref{fig:example-qfbv}, we can see that there are two output vocabularies ($\mathtt{ecx^\prime}$ and $\mathtt{eax^\prime}$) and one input vocabulary ($\mathtt{ebx}$) and the corresponding I/O formulas are written as follows:
+\begin{itemize}
+\centering
+\itemsep-0.1em
+ \item[] $\mathtt{ecx^\prime = Mem(ebp)}$
+  \item[] $\mathtt{eax^\prime = ebp + 4} $
+\end{itemize}
+The I/O formulae above clearly express the transformation of pre-state values into post-state values in symbolic mode, which  are internally used by our semantic similarity function $SemSim$ defined in Section~\ref{subsec:pos_sol}. Later in Section~\ref{subsubsec:sb_sem_mod_fe}, we shall discuss how to identify the suitable concrete values for input/output vocabularies such that all the I/O formulas are satisfied.
+
+%This is consistent with our definition~\ref{def:sem_sim}, where a partial trace can have several pre-state values $S$
+%
+%In the symbolic expression the primed vocabulary denotes the out
+%
+%have more than one input and output variables, where registers, flags and memory locations read from are called \emph{input variables} and the registers, flags and memory locations written to are called \emph{output variables}. The values of input variables define the pre machine state (i.e., pre-state) and the corresponding values of the output variables define the post machine state (i.e., post-state).
+%
+%This is consistent with our definition~\ref{def:sem_sim}, where there can be several machine states $S$, depending on the input and the corresponding output variable values, that a partial trace can execute on. Therefore, from the extracted symbolic expressions, the input/output variables are identified  and they are organized in such a way that each output variable is expressed in terms of input variables (called \emph{I/O formula}).
+%%represented in the form: $\langle$output variable$\rangle$ $=\langle$input variables(s)$\rangle$.
+%For example, in the second symbolic expression shown in figure~\ref{fig:example-qfbv} (assume its a partial trace with only two instructions), there are two output variables ($\mathtt{ecx^\prime}$ and $\mathtt{eax^\prime}$) and one input variable ($\mathtt{ebx}$), and the corresponding I/O formulas are written as follows:}
+%\begin{itemize}
+%\centering
+%\itemsep-0.1em
+% \item[] $\mathtt{ecx^\prime = Mem(ebp)}$
+%  \item[] $\mathtt{eax^\prime = ebp + 4} $
+%\end{itemize}
+%\note{Later in section~\ref{subsubsec:sb_sem_mod_fe}, we shall discuss how to identify the suitable values for input/output variables such that all the I/O formulas, extracted from a partial trace, are satisfied.}
+
+%The relationship between input and output arguments are called \textit{symbolic expressions}.
+%\ly{need an example here = given above}
+
+%\ly{need to discuss API here briefly, why cannot handle here}
+Finally, as discussed in Section~\ref{subsec:sem_chall}, one of the major problems in state-based semantic models is that effects of system APIs are not considered in the semantics. In the IR, it is common to implement subroutine calls (e.g., function calls, system API invocations) using unconditional jumps. For example, in our aforementioned primitive machine, subroutine calls are implemented using $\mathsf{Jal}$ instruction~\cite{de2015micro} as follows:
+\begin{equation*}
+\small
+\begin{aligned}
+\mathnormal{\frac{ \splitfrac{mem[pc]=i \quad decode \: i = \; \mathsf{Jal} \: r_p\, r_s \quad reg[r]=pc^\prime}{ reg^\prime = reg[r_a \leftarrow pc+1] \hfill}\mathsf{(Jal)}}{( mem, reg, flag, pc ) \rightarrow ( mem, reg^\prime, flag, pc^\prime)}}
+\end{aligned}
+\end{equation*}
+Here, the return address is saved to a general-purpose register $r_a$. From the transition rule, it can be seen that $pc^\prime$ holds the address of the target subroutine. If $pc^\prime$ is statically unresolvable or it falls out side the memory range of the binary under analysis (which is the case for system API), the execution resumes at the memory location $r_a$ without executing the subroutine. Hence, it is evident that the effects of system API are ignored\footnote{One can use function summary to captures the semantics of system API. However, it is not practical and summarizing all the functions in system libraries can be an error prone task.} in the state-based semantic models. %, as mentioned in C3 in Section \ref{subsec:sem_chall}.
+
+%That is, using QFBV formulas, we capture the machine-state transitions over each partial trace, resulting in a \texttt{set} of $\langle$pre-state, post-state$\rangle$ pairs for each function under investigation.
+
+%That is, we accumulate the QFBV formulas over a partial trace and derive an expression (called, symbolic expression or S-Expression) for each register, flag and memory locations written to during the execution.
+
+%the QFBV formulas are accumulated over a rage of basic-blocks (in our case, partial traces) and from the accumulated QFBV formulas, the effect of
+
+%That is, from each partial trace, QFBV formulas are collected and using them the effect of
+
+%A program state is characterised by register, control flag and memory values.
+%Formally, we define a program state as a triple $$(RegMap, FlagMap, MemMap)$$
+%where $RegMap$, $FlagMap$, and $MemMap$ map each register, control flag, and memory location to a value, respectively.
+%The effect of a binary code on the program states, is represented by a set of symbolic formulae, called \textit{symbolic expressions}.
+%
+%%\begin{mydef}
+%%\emph{(\textbf{Symbolic Expression}) } Symbolic formulae that represent the effects of executing a piece of code, on the program-state, in-terms of system registers, control flags and memory values.
+%%\end{mydef}
+%\begin{eqnarray}
+%\label{eq:sym_exp}
+% \text{\texttt{push ebp}} &\equiv& \text{(\texttt{(ESP' = ESP-4})} ~\wedge \nonumber \\
+%   &&  \text{(\texttt{[ESP-4] = EBP})}~
+%\end{eqnarray}
+%For example, the symbolic sexpression of an instruction `\texttt{push ebp}' is shown in Equation \ref{eq:sym_exp} (assuming in an IA-32 machine). It can be seen that when \texttt{EBP} register is pushed into the stack, the value of \texttt{ESP} register changes to \texttt{ESP-4} and the memory location \texttt{[ESP-4]} is now holding the value of \texttt{EBP} register. Here, prime (\texttt{'}) indicates the post execution state. In contrast to other symbolic expression\footnote{Symbolic expression and semantic features are used interchangeably in this paper.} based program representation techniques~\cite{pewnycross,lakhotia2013fast,ruttenberg2014identifying}, we extract semantic features at various granularity levels (i.e., beyond basic-block levels) to measure the effect of partial traces at different program points. Partial trace models are explained in details later under function model generation module.
+
+%\note{discuss the memory reads and writes briefly}
+
+%\subsection{Abstract Semantic Modelling} \label{subsec:abs_sem_mod}
+%
+%The limitation in state-based semantic model is that it lacks some of the details, readily available from the machine code, that can be leveraged on to understand the intentions (or objectives) of the partial traces. That is, state-based models are too low-level as such they are incapable of capturing the high-level behavioural characteristic of partial traces (discussed in section \ref{subsec:partial_trace}). In addition, the effects of system APIs are not interpreted in state-based models. That is, the instructions \texttt{call CreateFile} and \texttt{call GetTime} are treated in the same way, whereas, in reality, the effects of invoking these two system APIs are totally different. Hence, in \tool, we compensate the limitations of state-based semantic models using abstract semantic models, where we capture the high-level behavioural characteristics of each partial trace. The major challenge in extracting the behavioural characteristics from machine-code is that the assembly instructions (i.e., syntax) and the API (Application Programming Interface) names are not consistent across architectures (ARM Vs. x86) and platforms (Linux Vs. Windows), hence, they need to be unified.
+%
+%In addition, direct mapping from assembly instruction to high-level behaviour (e.g., `$\mathtt{mov}$' instruction is mapped to \texttt{data movement} operation) is too atomic, where in reality, collection of low-level instructions accomplish a high-level behaviour. For example, instruction sequence $\mathtt{push \; ebp;}$ $\mathtt{mov\;ebp\;esp;}$ can be mapped to \texttt{stack frame set-up} operation, which gives meaningful high-level behaviour compare to the one-to-one mappings, where the individual instructions are mapped to \texttt{stack data movement} and \texttt{register data movement} operations, respectively. In abstrct semnatic models, we try to identify these `meaningful' instruction sequence (called, \textit{machine-code idioms}) and map them to high-level behaviour.
+%
+%%\todo{Here, I need to explain, in detail, why IR is not used to extract high-level characteristics. The main reason is, IR is too low-level, where a simple `$\mathtt{pushfd}$' instruction in x86 takes around 40 REIL instructions to implement, hence, not suitable to extract high-level behavioural characteristics.}
+%
+%\subsubsection{Unified Abstraction}
+%Identifying meaningful instruction sequences (or idioms), from partial traces, is not always possible as partial traces can be too small (i.e, few instructions). In such cases, it is
+%
+%The assembly instructions extracted from  machine code can be directly used to represent the high-level behavioural characteristics. For example, $\mathtt{MOV\;EAX,EBX}$ tells that the value in source register $\mathtt{EBX}$ copied to the destination register $\mathtt{EAX}$. Similarly, the instruction $\mathtt{call\;CreateFile}$ indicates that a new file is created (or an existing file is opened). However, this representation shamelessly fail in the event of cross-architecture and -platform experiments due to the differences in instruction set architectures and the difference in API names, supported by different platforms. Therefore, to overcome these limitation, in abstract semantic models, the high-level behaviours are characterised by unified abstraction of operations (called, \textit{operation type}) and API invocations (called, \textit{API type}). That is, we abstract the operations carried out by the low-level instructions and the APIs invoked during the execution, such that they are architecture and platform agnostic (hence the name, \textit{unified abstraction}).
+%%the high-level intentions are characterised by two behavioural abstractions: (1) \textit{operation type}, and (2) \textit{library call type}. That is, instead of using instructions and library calls directly to represent the high-level intentions, we leverage on their abstractions.
+%
+%\begin{table}[t]
+%\caption{Categorization of assembly instructions based on their high-level operations.}\label{tab:opt-cat}
+%\begin{center}
+%{\scriptsize
+%\begin{tabular}{|c|c|}
+%  \hline
+%  \textbf{Operation type} & \textbf{Sample instructions} \\
+%  \hline
+%  Data movement & \texttt{mov, movsx, xchg, xor}\\
+%  \hline
+%  Arithmetic  & \texttt{add,adc,sub,sbb, lea} \\
+%  \hline
+%  Logic & \texttt{and,or,not,xor}\\
+%  \hline
+%  Shift-rotate & \texttt{shr,shl,sal,rcl,rcr}\\
+%  \hline
+%  String  & \texttt{cmps,cmpsb,cmpsw,cmpsd} \\
+%  \hline
+%  %Loop & \texttt{loop,loopne,loopnz,loope}\\
+%  %\hline
+%  %Control transfer & \texttt{jno,jnp,jns,jo,jp,jpe}\\
+%  %\hline
+%  Stack  & \texttt{pusha, pushf, popa, popf} \\
+%  \hline
+%  Conversion & \texttt{cbw, cwd, cwde, cdq, csq}\\
+%  \hline
+%  %I/O  & \texttt{in, out} \\
+%  %\hline
+% %Floating-point & \texttt{fld, fstp}\\
+%  %\hline
+% % Halt & \texttt{hlt}\\
+% % \hline
+% Flag  & \texttt{cld,clc,stc,std,sti} \\
+%  \hline
+%  \end{tabular}
+%}
+%\end{center}
+%\end{table}
+%
+%\begin{table}[t]
+%\caption{Abstraction of API calls based on the task accomplished}\label{tab:lib-cat}
+%\begin{center}
+%{\scriptsize
+%\begin{tabular}{|c|c|}
+%  \hline
+%  \textbf{API type} & \textbf{Sample API calls} \\
+%  \hline
+%  String & \texttt{strcpy, strcat}\\
+%  \hline
+%  Memory  & \texttt{memcpy, memset} \\
+%  \hline
+%  Network & \texttt{socket, gethostbyname }\\
+%  \hline
+%   File & \texttt{CreateFile, fopen}\\
+%  \hline
+%  Process  & \texttt{CreateProcess, pthread\_exit} \\
+%  \hline
+% Crypto & \texttt{crypt, encrypt}\\
+%  \hline
+%  Synchronization  & \texttt{CreateMutex, pthread\_mutex\_init} \\
+%  \hline
+%  Heap & \texttt{brk, HeapAlloc}\\
+%  \hline
+%  \end{tabular}
+%}
+%\end{center}
+%\end{table}
+%
+%%In addition to low level semantic features, \tool leverages on high-level semantic features extracted from the functions to understand the operations carried out by the binary code. Combining state-based semantic and abstract semantic features gives the good mix of functions properties that can be effectively used to search similar functions from the target function pool. To this end, we are considering two behavioural abstractions: (1) operation type, and (2) library call invocations.
+%
+%\begin{itemize}
+%
+%\item \textbf{Operation type}: Here, we look into the actual machine code to infer the possible operations, at a given abstraction level, that a partial trace can perform. To this end, we have identified several types of operations that are architecture agnostic. That is, these operation types are uniform across different architectures. They are as follows: data movement, arithmetic operation, logic operation, shift and rotate operation, string operation,
+%%loop operation, control transfer operation,
+%stack operation, conversion (or sign extension) operation,
+%%I/O operation,
+%%floating-point operation
+%%halt operation
+%and flag manipulation. Table \ref{tab:opt-cat} list the operation types used in \tool.
+%
+%\item \textbf{API type}: API invocations give a valuable hint about the activities that are likely to be carried by the partial trace. For example, the presence of \texttt{strcpy} function from \texttt{libc} library indicates that the partial trace is likely to handle strings. We can directly include the API name as part of the feature, if both the search query and the target functions are compiled for the same platform (e.g., Linux) and uses identical API calls. However, in real-world, this assumption is too restrictive, even within the same platform, as there are several alternate APIs available to accomplish a given task  (e.g., in Windows, to create a file, a programmer can either use \texttt{CreateFile} API call or \texttt{OpenFile} API call with open switch).  Thus, in abstract semantic models, to account for the differences in API calls that accomplish similar task and to enable cross-platform (e.g., Windows vs. Linux) analysis, we map API invocations to their corresponding types. For example, string functions such as \texttt{strlen} and \texttt{srtncat} are mapped to \textit{string} API type. That is, \texttt{strlen} and \texttt{srtncat} APIs are, in general, used to manipulate a given string, hence, abstracted to `string' API type. Table \ref{tab:lib-cat} lists the API types used in \tool.
+%\end{itemize}
+%
+%\subsubsection{Abstract Semantic Graph}
+%The high-level behavioural characteristics extracted from partial traces alone is not very useful unless it is represented systematically to capture the complete picture. For example, consider the following instruction sequence and the corresponding abstractions.
+%
+%\begin{itemize}
+%\itemsep0em
+%  \item[] $\mathtt{mov \;\; eax, [ebp] \quad\quad// data\_movement\_from\_memory}$
+%  \item[] $\mathtt{push \;\; eax \quad\quad// stack\_operation\_store}$
+%  \item[] $\mathtt{call \;\; socket \quad\quad// network\_connection}$
+%\end{itemize}
+%
+%It can be seen that abstract information extracted from each instruction alone, without any systematic representation, doesn't fully express the underlying intention of this code segment. One major limitation in representing the high-level behavioural characteristics  as a set (e.g.,
+%%$\mathtt{data\_movement\_from\_memory,}$  $\mathtt{stack\_operation\_store,}$  $\mathtt{network\_connection}$
+%\{\textit{data\_movement\_from\_memory, stack\_operation\_store, network\_connection}\}) is that the relationship between behaviour is completely ignored, where in the above code segment, all three instructions are related (i.e., data dependent). Hence, its vital to reflect the relationship between extracted behavioural characteristics. To this end, we use directed graph to represent the high-level behaviour and their relationship, where it is referred to as \textit{abstract semantic graph} and the definition is given below.
+%
+%\begin{mydef}
+%\emph{(\textbf{Abstract Semantic Graph}) }  Abstract Semantic Graph is a directed acyclic graph, where the nodes represent the high-level behaviour and the edges represent the relationship between two high-level behaviours. Here, relationship refers to the data dependence between two behavioural characteristics.
+%\end{mydef}
+%
+%It is important to note that identifying the data-dependence relationship between two high-level behaviours is not feasible as the extracted behaviours are too abstract. Hence, to build the abstract semantic graph, we leverage on the data-dependence between assembly instructions and propagate the relationship to the behaviour level. This is from the notion that if two assembly instructions are data-dependent, their high-level abstractions (i.e., behaviour) are too data-dependent. To this end, we rely on the \textit{def-use} chains to identify the data-dependence between assembly instructions. The abstract semantic graph for the above code segment will look like this:
+%
+%\begin{figure}[!h]
+%\begin{center}\vspace{-1mm}
+%\includegraphics[height=4cm, width=6cm]{srj-figures/srj-graph.png} \vspace{-1mm}
+%\caption{Abstract semantic graph}
+%\label{fig:abs} %\vspace{-1mm}
+%\end{center}
+%\end{figure}
+%%
+%%\begin{MyAlgo}[!ht]{-4.9cm} %increase or decrease margin, span across columns
+%% \DontPrintSemicolon
+%% \KwData{partial trace $\wp$}
+%% \KwResult{set of abstract semantic graphs $G$}
+%%% \SetKwFunction{algo}{ExtractTracelets}\SetKwFunction{proc}{Extract}
+%%% \SetKwProg{myalg}{Algorithm}{}{}
+%%% \myalg{\algo{$CFG$}}{
+%%  $G \longleftarrow \emptyset$ \;%\tcp*{set of abstract semantic graphs}
+%% \ForEach{{\upshape instruction} i {\upshape in} $\wp$}{
+%%  %\tcc{write the algo here}
+%%  %$kT \longleftarrow kT \cup Extract(b, k)$\;
+%%  $D_i \longleftarrow  \mathtt{getDef}(i)$\;
+%%  $g \longleftarrow \emptyset$\;
+%%  $j := i.\mathtt{Next}$\tcp*{$j$ is the next instruction after $i$ in $\wp$}
+%%   \ForEach{{\upshape instruction} j {\upshape in} $\wp$}{
+%%   $U_j \longleftarrow  \mathtt{getUse}(j)$\;
+%%   $D_j \longleftarrow  \mathtt{getDef}(j)$\;
+%%   \If{$U_j \in D_i $}{
+%%	   	$g := g \cup {v_i \rightarrow v_j}$\;
+%%   		 \If{$\mathtt{getType}(j) == \mathtt{DATA\_MOVEMENT}$}{
+%%   			$D_i := D_i \cup D_j$\;
+%%   		}
+%%     }
+%%      \If{$D_j \in D_i $}{
+%%	   	$D_i := D_i \setminus D_j$\;
+%%   		}
+%%   		\If{$D_i ==  \emptyset $}{
+%%   			%\If{$g$ {\upshape not in}  $G$}{
+%%   			\If{$\mathtt{isPresent}(g,G) = 0$}{
+%%   		 		$G := G \cup g$\;
+%%   		 	}
+%%	   	   $break$\;
+%%   		}
+%%   }
+%%  }
+%%  \Return ${G}$
+%%  %}
+%%  %\setcounter{AlgoLine}{0}
+%%  %\SetKwProg{myproc}{Procedure}{}{}
+%%  %\myproc{\proc{b, k}}{
+%%  %\eIf{$k == 1$}{
+%%   % \Return $b_s$
+%%  %}{
+%%   %\Return $\bigcup b \times Extract(b^\prime, k-1)$\;
+%%  %}
+%%  %}
+%%  \\
+%% \caption{Abstract semantic graph constraction using def-use chain}\label{algo:def-use}
+%%\end{MyAlgo}
+%
+%
+%\begin{MyAlgo}[!ht]{-4.9cm} %increase or decrease margin, span across columns
+% \DontPrintSemicolon
+% \KwData{partial trace $\wp$}
+% \KwResult{set of abstract semantic models $G$}
+%% \SetKwFunction{algo}{ExtractTracelets}\SetKwFunction{proc}{Extract}
+%% \SetKwProg{myalg}{Algorithm}{}{}
+%% \myalg{\algo{$CFG$}}{
+%  $G \longleftarrow \emptyset$ \;%\tcp*{set of abstract semantic graphs}
+%   $N \longleftarrow \emptyset$ \;
+%  $\wp_s = \mathtt{unifySystemAPI}(\wp)$\;
+%   \ForEach{i = 0 {\upshape \textbf{To}} max}{
+%   $ N := N \cup \mathtt{getNgramModel}(\wp_s, i)$\;
+%   }
+%   \tcp{sort ngram model based on length in descending order}
+%   $N_s \longleftarrow \mathtt{sortDescending}(N)$ \;
+%   \ForEach{{\upshape ngram model} n {\upshape in} $N_s$}{
+%    $ I_{\wp} := I_{\wp} \cup \mathtt{matchIdiom}(n,I_d)$\;
+%   }
+%    $ G \longleftarrow  \mathtt{mapIdiomToBehaviour}(I_{\wp})$\;
+%   \tcp{get instructions not covered by idioms}
+%   $\wp_u \longleftarrow \mathtt{uncoveredIns}(\wp_s, I_{\wp})$\;
+%   \ForEach{{\upshape instruction} k {\upshape in} $\wp_u$}{
+%   $G := G \cup \mathtt{mapInsToBehaviour}(k)$\;
+%   }
+%
+%  \Return ${G}$
+%  %}
+%  %\setcounter{AlgoLine}{0}
+%  %\SetKwProg{myproc}{Procedure}{}{}
+%  %\myproc{\proc{b, k}}{
+%  %\eIf{$k == 1$}{
+%   % \Return $b_s$
+%  %}{
+%   %\Return $\bigcup b \times Extract(b^\prime, k-1)$\;
+%  %}
+%  %}
+%  \\
+% \caption{Abstract semantic model generation}\label{algo:def-use}
+%\end{MyAlgo}
+%
+%From figure \ref{fig:abs}, it can be seen that the relationship between high-level behaviours gives the complete picture of what the code segment is doing. That is, from the above abstract semantic graph, we can infer that some data from the memory is sent over the network.  Algorithm \ref{algo:def-use} presents the def-chain algorithm that is used to identify the data dependence between assembly instructions. Here, we define several functions to accomplish our tasks. They are; (1) $\mathtt{getDef(i)}$ returns the variables defined in instruction $i$ (e.g., in `$\mathtt{mov\;eax,ebx}$', the register $\mathtt{eax}$ is defined), (2) $\mathtt{getUse(i)}$ returns the variables used in instruction $i$ (e.g., in the previous instruction, the register $\mathtt{ebx}$ is used), (3) $\mathtt{isPresent(g,G)}$ check whether the abstract semantic graph $g$ is already present in $G$, and (4) $\mathtt{getType(i)}$  returns the type of the instruction $i$. At high-level, for each instruction present in the partial trace, we get the defined variables and iterate through the rest of the instructions to check whether those defined variables are used elsewhere, if found, data dependency between those two instructions are established. Each iteration terminates either (1) reached end of partial trace, or (2) variable defined by instruction $i$ is redefined by another instruction $j$, where $location(i) < location(j)$.
+%%Thought these code properties helps to identify potential candidate functions in the target program, there are several drawbacks that we need to be aware of. First, it is important to note that some programs may implement their own version of some the library functions, in which case, we may fail to detect the vulnerabilities in functions (if present) that invoke their own version of library function. Fortunately, most of programs still use the standard library functions and thus, we decided to include them as part of the pre-filtering properties. Next, structural information, cannot always be trusted as, in practise, compilers can inline/outline functions and hence, this metric will provide some misleading information. Similarly, operation type may too provide some false indication as some tasks can be achieved with semantically equivalent instruction that belongs two different types in our categorization.
+%
+%%However, considering the number of functions present in the real world applications, it is very beneficial, in terms of scalability, to have a pre-filtering process in place to select candidate target functions that are likely to contain vulnerability.   Hence, to reduce the negative impact of our properties, we apply weights to each property based on their contribution in pre-filtering. Through evaluation, we identified that library call invocation and operation type properties considerably contributes towards correctly identifying candidate target functions followed by structural property. Therefore, the total synthetic similarity ($sim_{tot}$) is measured as follows:
+%%\begin{equation}
+%%sim_{tot} = w_l*sim_l + w_o*sim_o + w_s*sim_s \label{eq:tot_syn_sim}
+%%\end{equation}
+%%where, $sim_l$, $sim_o$ and $sim_s$ refers to similarities based library call invocation, operation type and structural properties, and $w_l$, $w_o$ and $w_s$ refers to their corresponding weights, respectively.

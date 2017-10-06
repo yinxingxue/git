@@ -1,0 +1,49 @@
+\section{Idioms example}
+\begin{table*}[h!]
+	\begin{center}
+
+\begin{tabular}{ | l |}
+pop reg;pop reg;pop reg;pop ebp;ret   = 673\\  \hline 
+mov mem\_esp reg;mov reg mem\_esp;mov mem\_esp reg;mov reg mem\_esp;mov mem\_esp reg = 558\\  \hline 
+mov reg mem;mov mem reg;mov reg mem;mov mem reg;mov reg mem = 390\\  \hline 
+mov mem reg;mov reg mem;mov mem reg;mov reg mem;mov mem reg = 386\\  \hline 
+mov reg mem\_esp;mov mem\_esp reg;mov reg mem\_esp;mov mem\_esp reg;mov reg mem\_esp = 332\\  \hline 
+lea reg mem;mov mem\_esp reg;lea reg mem;mov mem\_esp reg;lea reg mem = 318\\  \hline 
+pop reg;pop reg;pop ebp;ret ;lea reg mem = 289\\  \hline 
+mov reg mem\_esp;mov mem\_esp reg;mov mem\_esp reg;mov reg mem\_esp;mov mem\_esp reg = 202\\  \hline 
+pop reg;pop reg;pop ebp;ret ;nop   = 197\\  \hline 
+mov mem\_esp reg;mov reg mem\_ebp;mov mem\_esp reg;mov reg mem\_ebp;mov mem\_esp reg = 197\\  \hline 
+mov reg mem\_esp;mov mem\_esp reg;mov reg mem\_esp;mov mem\_esp reg;mov mem\_esp reg = 186\\  \hline 
+pop reg;pop reg;pop reg;ret ;lea reg mem = 174\\  \hline 
+mov reg reg;pop reg;pop reg;pop reg;pop ebp  = 167\\  \hline 
+push reg;push reg;push reg;push reg;push reg  = 162\\  \hline 
+push ebp;mov ebp esp;push reg;push reg;push reg  = 139\\  \hline 
+mov reg mem\_ebp;mov mem\_esp reg;mov reg mem\_ebp;mov mem\_esp reg;mov reg mem\_ebp = 130\\  \hline 
+lea reg mem;add reg reg;add reg reg;lea reg mem;pop reg  = 129\\  \hline 
+push reg;push reg;mov reg mem\_esp;mov reg mem\_esp;mov reg mem\_esp = 127\\  \hline 
+mov mem\_esp reg;mov reg mem;mov mem\_esp reg;mov reg mem;mov mem\_esp reg = 126\\  \hline 
+lea reg mem;pop reg;pop reg;pop reg;ret   = 125\\  \hline 
+mov mem\_esp reg;mov reg mem\_esp;mov mem\_esp reg;mov mem\_esp reg;mov reg mem\_esp = 121\\  \hline 
+mov reg mem\_esp;mov mem\_esp reg;mov mem\_esp reg;mov mem\_esp reg;mov mem\_esp reg = 118\\  \hline 
+add reg reg;lea reg mem;pop reg;add reg mem;jmp reg  = 116\\  \hline 
+lea reg mem;pop reg;add reg mem;jmp reg;mov reg reg = 116\\  \hline 
+add reg reg;add reg reg;lea reg mem;pop reg;add reg mem = 116\\  \hline 
+mov mem\_esp reg;lea reg mem;mov mem\_esp reg;lea reg mem;mov mem\_esp reg = 116\\  \hline 
+mov mem\_esp reg;mov mem\_esp reg;mov reg mem\_esp;mov mem\_esp reg;mov reg mem\_esp = 114\\  \hline 
+mov mem reg;mov mem reg;mov mem reg;mov mem reg;mov mem reg = 110\\  \hline 
+mov reg reg;mov reg mem\_esp;mov reg mem\_esp;mov reg mem\_esp;mov ebp mem\_esp = 108\\  \hline 
+\\  \hline 
+\\  \hline 
+push reg;lea reg mem\_ebp;push reg;lea reg mem\_ebp;push reg  = 146\\  \hline 
+mov reg mem;mov mem\_ebp reg;mov reg mem;mov mem\_ebp reg;mov reg mem = 139\\  \hline 
+mov reg reg;push ebp;mov ebp esp;push reg;push reg  = 138\\  \hline 
+mov reg mem\_ebp;mov mem reg;mov reg mem\_ebp;mov mem reg;mov reg mem\_ebp = 119\\  \hline 
+mov mem\_ebp reg;mov reg mem;mov mem\_ebp reg;mov reg mem;mov mem\_ebp reg = 118\\  \hline 
+lea reg mem\_ebp;push reg;lea reg mem\_ebp;push reg;push reg  = 112\\  \hline 
+mov mem reg;mov reg mem\_ebp;mov mem reg;mov reg mem\_ebp;mov mem reg = 110\\  \hline 
+lea reg mem\_ebp;push reg;push reg;lea reg mem\_ebp;push reg  = 108\\  \hline 
+lea reg mem\_ebp;push reg;lea reg mem\_ebp;push reg;push mem\_ebp  = 104\\  \hline 
+lea reg mem\_ebp;push reg;push reg;push reg;push reg  = 101
+\end{tabular}
+\end{center}
+\end{table*}

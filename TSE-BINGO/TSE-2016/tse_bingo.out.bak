@@ -1,0 +1,52 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Motivation}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Motivating Example}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Challenges for Syntactic Approaches}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.3}{Challenges for Semantics-based Matching}{section.2}% 5
+\BOOKMARK [1][-]{section.3}{System Overview of BinGo-E}{}% 6
+\BOOKMARK [2][-]{subsection.3.1}{The Sketch of Work Flow}{section.3}% 7
+\BOOKMARK [2][-]{subsection.3.2}{Solutions to the Matching Challenges}{section.3}% 8
+\BOOKMARK [1][-]{section.4}{Binary Code Matching Features}{}% 9
+\BOOKMARK [2][-]{subsection.4.1}{Structural Features}{section.4}% 10
+\BOOKMARK [2][-]{subsection.4.2}{High-level Semantic Features}{section.4}% 11
+\BOOKMARK [2][-]{subsection.4.3}{Low-level Semantic Features}{section.4}% 12
+\BOOKMARK [3][-]{subsubsection.4.3.1}{Features Used in BinGo}{subsection.4.3}% 13
+\BOOKMARK [3][-]{subsubsection.4.3.2}{Features Newly Added in BinGo-E}{subsection.4.3}% 14
+\BOOKMARK [3][-]{subsubsection.4.3.3}{Emulation}{subsection.4.3}% 15
+\BOOKMARK [1][-]{section.5}{Accurate: Selective Inlining}{}% 16
+\BOOKMARK [2][-]{subsection.5.1}{Function Invocation Patterns}{section.5}% 17
+\BOOKMARK [2][-]{subsection.5.2}{Inline Decision Algorithm}{section.5}% 18
+\BOOKMARK [1][-]{section.6}{Scalable Function Matching}{}% 19
+\BOOKMARK [2][-]{subsection.6.1}{Primary Matching}{section.6}% 20
+\BOOKMARK [2][-]{subsection.6.2}{Low-level Semantic Features Matching}{section.6}% 21
+\BOOKMARK [3][-]{subsubsection.6.2.1}{K-length Partial Trace Extraction}{subsection.6.2}% 22
+\BOOKMARK [3][-]{subsubsection.6.2.2}{Function Model Generation}{subsection.6.2}% 23
+\BOOKMARK [2][-]{subsection.6.3}{Final Matching}{section.6}% 24
+\BOOKMARK [1][-]{section.7}{Experimental Results}{}% 25
+\BOOKMARK [2][-]{subsection.7.1}{Research Question}{section.7}% 26
+\BOOKMARK [2][-]{subsection.7.2}{Answer to RQ1: Robustness in Cross-architecture Matching}{section.7}% 27
+\BOOKMARK [3][-]{subsubsection.7.2.1}{BinGo's Answer to RQ1}{subsection.7.2}% 28
+\BOOKMARK [3][-]{subsubsection.7.2.2}{BinGo-E's Answer to RQ1}{subsection.7.2}% 29
+\BOOKMARK [2][-]{subsection.7.3}{Answer to RQ2: Robustness in Cross-compiler Matching}{section.7}% 30
+\BOOKMARK [3][-]{subsubsection.7.3.1}{BinGo's Answer to RQ2}{subsection.7.3}% 31
+\BOOKMARK [3][-]{subsubsection.7.3.2}{BinGo-E's answer to RQ2}{subsection.7.3}% 32
+\BOOKMARK [2][-]{subsection.7.4}{Answer to RQ3: Robustness in Cross-platform \(OS\) Matching}{section.7}% 33
+\BOOKMARK [3][-]{subsubsection.7.4.1}{BinGo's Answer to RQ3}{subsection.7.4}% 34
+\BOOKMARK [3][-]{subsubsection.7.4.2}{BinGo-E's Answer to RQ3}{subsection.7.4}% 35
+\BOOKMARK [2][-]{subsection.7.5}{Answer to RQ4: Applications}{section.7}% 36
+\BOOKMARK [3][-]{subsubsection.7.5.1}{BinGo's Answer to RQ4: Vulnerability Detection via Matching Open-source Software Bug to Commercial Software}{subsection.7.5}% 37
+\BOOKMARK [3][-]{subsubsection.7.5.2}{BinGo-E's Answer to RQ4: New Application of Matching Binaries of Forked Projects}{subsection.7.5}% 38
+\BOOKMARK [2][-]{subsection.7.6}{Answer to RQ5: Scalability}{section.7}% 39
+\BOOKMARK [3][-]{subsubsection.7.6.1}{BinGo's Answer to RQ5}{subsection.7.6}% 40
+\BOOKMARK [3][-]{subsubsection.7.6.2}{BinGo-E's Answer to RQ5: Better Scalability}{subsection.7.6}% 41
+\BOOKMARK [2][-]{subsection.7.7}{Discussion}{section.7}% 42
+\BOOKMARK [3][-]{subsubsection.7.7.1}{Threats to Validity}{subsection.7.7}% 43
+\BOOKMARK [3][-]{subsubsection.7.7.2}{The Focus of Our Study.}{subsection.7.7}% 44
+\BOOKMARK [1][-]{section.8}{Related Work}{}% 45
+\BOOKMARK [2][-]{subsection.8.1}{Code Search Using Low-level Program Semantics}{section.8}% 46
+\BOOKMARK [2][-]{subsection.8.2}{Code Search Using High-level Program Semantics}{section.8}% 47
+\BOOKMARK [2][-]{subsection.8.3}{Code Search Using Structural Information}{section.8}% 48
+\BOOKMARK [2][-]{subsection.8.4}{Security Application of Binary Code Search}{section.8}% 49
+\BOOKMARK [1][-]{section.9}{Conclusion}{}% 50
+\BOOKMARK [1][-]{section.10}{Acknowledgements}{}% 51
+\BOOKMARK [1][-]{section*.24}{References}{}% 52

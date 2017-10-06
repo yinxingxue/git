@@ -1,0 +1,149 @@
+%aum gaanathipathaye namaha
+%srj
+\section{Vulnerability Signature Matching Phase}\label{sec:pre-proc}
+
+\todo {\color{blue} write 1-2 lines about what is going to happen here}
+
+\subsection{Vulnerability Signature}
+
+%\todo {\color{blue} with the help of an example illustra how a vulnerability signature will look like}.
+For effective vulnerability hunting, in addition to suitable vulnerability modelling (as explained in section \ref{subsec:vul_mod}), it is vital to generate proper vulnerability signatures that can be used to extrapolate similar vulnerabilities in the target program. An easiest approach would be to mark the entire vulnerable function as a signature, where it contains both basic-blocks that are related and not related (e.g., function prologue and epilogue) to the vulnerability. This approach reduces the manual efforts to create a vulnerability signature, however, it may leads to lots of false positives, which is undesirable. Hence, a more fine-grained signature is preferred.
+
+In our system, we strictly deal with binary code alone to generate signatures, where we don't leverage on any symbols or debug information (except imported functions from system libraries such as \texttt{libc} or \texttt{msvcrt}) that are present in the binaries. A typical vulnerability signature is consists of basic blocks and the control-flow transitions that are related to the vulnerability. To this end, we first extract the synthetic features (or code properties) from the vulnerable function, which are then used to pre-filter the candidate target functions. Later, from the function CFG, we manually identify the basic-blocks (along with their control-flow transitions) that are directly involved in the vulnerability. In this way, our vulnerability signatures are restricted to only the basic-blocks that are related to the vulnerability. 
+
+It is observed that once a vulnerability is known and has been understood deriving a signature is straightforward with minimal manual effort \cite{ruttenberg2014identifying}. However, the analyst needs to make sure that the generated vulnerability signature is free of irrelevant basic-blocks and not too generic (in-terms of vulnerability specification), else, it may leads to false positives, which in return, hinders the effectiveness of vulnerability extrapolation.  
+
+\subsection{Candidate target functions selection}\label{subsec:pre_fil}
+
+%\todo {\color{blue} Explain how synthetic features are used to pre-filter the target program to choose candidate functions. Include an algorithm to do the scanning.}
+As mentioned earlier, it is computationally very expensive to compare vulnerability signature with every single function in the target program. Therefore, to improve the scalability of our system, we have included a pre-filtering process in the system workflow, which selects the candidate target functions that are likely to have the vulnerability based on synthetic features (or code properties) extracted from the signature function. The code properties considered for pre-filtering are explained in section \ref{subsec: syn_fea}. 
+
+Algorithm \ref{alg:candid_func} presents the steps involved in candidate target function selections. The algorithm takes synthetic features extracted from signature function and a target program as its inputs and returns the candidate target functions. At first, the functions are extracted from the target program (line \ref{algo1_sec:extract_func}) and then, from each function, the corresponding synthetic features are extracted (line \ref{algo1_sec:extract_syn_fea}) and the synthetic similarity is measured between the function under consideration and the vulnerability signature (line \ref{algo1_sec:syn_sim}). Finally, based on some threshold value $t$, the candidate functions are selected (line \ref{algo1_sec:threhold}). That is, target functions that are closest to the vulnerability signature, in-terms of synthetic similarity, are selected as candidate target functions.  The procedure \textsf{SyntheticSimilarity}, returns the weighted synthetic similarity between signature and target functions measured across all three code properties (line \ref{algo1_sec:sim_weight}). 
+
+
+\begin{algorithm}[t]                  
+\footnotesize
+\caption{Candidate target function selection \todo {\color{blue}procedure line numbers are not showing correctly.}}          
+\label{alg:candid_func}             
+    \KwIn{synthetic features $f^s$ extracted from signature function, target program $T$}
+    \KwOut{candidate target fucntions $C^t$}
+\begin{spacing}{1.2}    
+    $C^t \leftarrow \varnothing$\;
+    %$Sim^t \leftarrow \langle\rangle$\;
+    $F_t \leftarrow$ \textsf{ExtractFunction($T$)}\;\label{algo1_sec:extract_func}
+    \For{$f~\in~F_t$}{
+    	$f^t \leftarrow$ \textsf{ExtractSyntheticFeatures($f$)}\; \label{algo1_sec:extract_syn_fea}
+    	$s \leftarrow$ \textsf{SyntheticSimilarity}($f^s,f^t$)\; \label{algo1_sec:syn_sim}
+    	%$Sim^t \leftarrow Sim^t ~\cup~ \langle f^t,s \rangle $\;
+    	 \If{$s~>~$\text{threshold} $t$}{ \label{algo1_sec:threhold}
+            $C^t \leftarrow C^t ~\cup~ f^t$
+        }
+    }
+%    \For{$\langle f^t,s\rangle~\in~Sim^t$}{
+%        \If{$s~>~$\text{threshold} $t$}{ \label{algo1_sec:threhold}
+%            $C^t \leftarrow C^t ~\cup~ f^t$
+%        }
+%    }
+    \KwRet{$C^t$}\;
+  \SetKwFunction{proc}{\text{\textsf{SyntheticSimilarity}}}     
+  \setcounter{AlgoLine}{0}
+  \SetKwProg{myproc}{Procedure}{}{}
+  \myproc{\proc{$f^s,f^t$}}{
+  \nl $sim_{tot} = w_l*sim_l(f^s_l,f^t_l) + w_o*sim_o(f^s_o,f^t_o) + w_s*sim_s(f^s_s,f^t_s) $\; \label{algo1_sec:sim_weight}
+  \nl \KwRet $sim_{tot}$\;}
+\end{spacing}
+\end{algorithm}
+
+
+\subsection{Semantic feature matching}
+
+We measure the similarity between signature and target program tracelets using \textit{smart sampling} technique, where sampling refers to generating a set concrete values and use them as inputs to the symbolic expressions. As a result, we'll have a set of input/output (I/O) pairs, where inputs will be the concrete values and the outputs will be the outcome of applying concrete values to the symbolic expressions. These I/O pairs captures the actual semantics of each symbolic expression. Measuring similarity between symbolic expressions using sampling technique is successfully applied in the past to various problems \cite{pewnycross}\cite{lakhotia2013fast} including vulnerability detection. In these approaches, the inputs are randomly generated within a range (e.g., [-1000,1000]) and applied to both signature and target symbolic expressions \cite{pewnycross}. 
+
+However, in this work, we apply smart inputs instead of random inputs (hence the term, \textit{smart sampling}), where smart inputs are generated from vulnerability signatures using a theorem prover. That is, we solve the formulae in the vulnerability signature and generate a set of concrete values that can satisfy the constraints present in the signature. Later, these concrete values are applied to symbolic expressions in the target program and their outcomes are observed. One of the drawbacks in using random inputs is that certain outputs needs special inputs \cite{pewnycross}. For example, in this symbolic expression, $\text{\texttt{ZF}} \equiv \text{\texttt{EAX~+~5~==~0}}$, the zero flag \texttt{ZF} is set only when \texttt{EAX = -5}, otherwise it is unset. Hence, it is essential to use a theorem prover to generate smart inputs that are not always possible otherwise.
+
+In general, solving symbolic equations using theorem prover is considered costly, however, in our case, we are apply theorem prover only on the vulnerability signature, which is very small (only few formulae) and use the generated concrete values as inputs to the target symbolic expressions. Hence, the cost is insignificant. Algorithm \ref{alg:sem_fea_mat}, presents the semantic feature matching process. First, symbolic expressions are obtained from both signature and target tracelets (line \ref{algo2:get_expr1} and \ref{algo2:get_expr2}), then, using a theorem prover, smart samples (or inputs) are generated (line \ref{algo2:smart_samp}). Next, input class list is obtained from the signature (line \ref{algo2:input_var_class}), where input class refers to the number of inputs in a symbolic expression. For example, the equation \texttt{EAX~=~ESP-0x4} contains only one input (i.e., \texttt{ESP}), and thus, belongs to input class 1. Similarly, the equation \texttt{EBX~=~ESP-ECX} consists of two inputs (e.g., \texttt{ESP} and \texttt{ECX}) hence, belongs to input class 2. Essentially, \texttt{N} contains the list of input classes present in the signature. The reason for doing so is that we only compare two symbolic equations that belongs to the same input class (lines \ref{algo2:for_start} to \ref{algo2:for_end}). Finally, the average similarity across all input classes is returned (line \ref{algo2:avg_sim}). Here, we are using Jaccard index \cite{jaccardindex} to measure the similarity between two sets of I/O pairs (line \ref{algo2:jacc}). For more details on sampling, we refer the reader to \cite{pewnycross}.
+
+
+\begin{algorithm}[t]                  
+\footnotesize
+\caption{Semantic feature matching \todo {\color{blue}certain things regardign this procedure need to be discussed with you sir.}}          
+\label{alg:sem_fea_mat}   
+\begin{spacing}{1.2}          
+  \SetKwFunction{proc}{\text{\textsf{TraceletSimilarity}}}     
+  \setcounter{AlgoLine}{0}
+  \SetKwProg{myproc}{Procedure}{}{}
+  \myproc{\proc{$t^s,t^t$}}{
+  $f^s \leftarrow$ \text{\textsf{GetSymbolicExpression($t^s$)}}\; \label{algo2:get_expr1}
+  $f^t \leftarrow$ \text{\textsf{GetSymbolicExpression($t^t$)}}\; \label{algo2:get_expr2}
+  $S \leftarrow$ \text{\textsf{GetSmartSamples($f^s$)}}\; \label{algo2:smart_samp}
+  $N \leftarrow$ \text{\textsf{GetInputClassList($f^s$)}}\; \label{algo2:input_var_class}
+  $Sim \leftarrow 0$\;
+  $Sim_{tot} \leftarrow 0$\;
+  \For{$n~\in~N$}{ \label{algo2:for_start}
+  	$s^s \leftarrow$ \text{\textsf{ApplySamples($S,f^s,n$)}}\;
+  	$s^t \leftarrow$ \text{\textsf{ApplySamples($S,f^t,n$)}}\;
+  	$Sim \leftarrow Sim~+$ \text{\textsf{JaccardSimilarity($s^s,s^t$)}}\;\label{algo2:jacc}
+  } \label{algo2:for_end}
+  $Sim_{tot} \leftarrow Sim/len(N)$\; \label{algo2:avg_sim}
+  \KwRet $Sim_{tot}$\;}
+\end{spacing}
+\end{algorithm}
+
+
+\subsection{Vulnerability search using self-adoptable tracelet models} \label{subsec:nns}
+As explained in section \ref{subsec:vul_mod}, we model the vulnerability in the form of $k$-tracelets. However, deciding the right values for  $k$ (i.e., tracelet length) is very crucial for effective vulnerability detection, where the impact of unrelated basic-blocks (i.e., basic-blocks that do not contribute to the vulnerability) can be very detrimental. Further, an appropriate tracelet length can alleviate the effects of basic-block merging and splitting, hence, improves the robustness. Unfortunately, there is no fixed value for $k$ for a given vulnerability, where it depends on various factors, such as used IDE, compiler version and optimization level, which are beyond the control of security analysts. Thus, it has to be self-adoptable based on the binaries analysed.
+
+To this end, we leverage on the systematic sequential searching technique to arrive at the optimal models.That is, each signature model is compared against each tracelet model in the target binary, sequentially, starting from $k^s=1$ and $k^t=1$, until the tracelet similarity is maximized. The values of $k^s$ and $k^t$ at the maximal point, will make the optimal tracelet models for target and signature programs for that given vulnerability. It is an exhaustive searching technique, however, to improve the scalability, we leveraged on target function pre-filtering and some heuristics. Pre-filtering, as discussing in section \ref{subsec:pre_fil}, helps to select candidate target functions, which is considerably  small in number compare to actual number of functions. On the other hand, relying on heuristics, we can decide when to stop exploring further, which enables us to avoid exploring unprofitable tracelet models.  It is based on a common observation that basic-blocks adjacent to a vulnerable basic-block are also likely to contribute to the vulnerability, but when doing so, if the similarity between signature and target decreases, we stop increasing $k$ further and terminate the search, else, we continue to increase the value of $k$ (i.e., merge adjacent basic-blocks along the path) until the similarity starts to drop.
+
+We present the vulnerability searching algorithm using self-adaptable tracelet models in Algorithm \ref{alg:nns_self_adpt}, which takes the signature and target function traclelets and returns the similarity matrix. Target tracelets are generated from the candidate functions identified in the pre-filtering phase. For each signature tracelet model, the target tracelet models are sequentially searched (line \ref{algo:algo3_target}) until an optimal point is arrived (line \ref{algo:algo3_opt1}). This point will represent the optimal target tracelet model ($t^t_j$) for a given signature traclelt model ($t^s_i$). Then, the algorithm continues to select the next signature tracelet model (line \ref{algo:algo3_start}) and these steps are repeated until an optimal signature model is arrived (line \ref{algo:algo3_opt2}). It can be observed that the search is terminated, when the current tracelet model yield poor similarity score compare to the previous model in a sequential search (lines \ref{algo:algo3_opt1} and \ref{algo:algo3_opt2}). Optimal signature and target tracelet models and their corresponding similarities can be obtained from the returned similarity matrix (line \ref{algo:algo3_ret}). 
+
+
+\begin{algorithm}[t]                 % enter the algorithm environment
+\footnotesize
+\caption{Vulnerability search using self-adaptable tracelet model}         
+\label{alg:nns_self_adpt}                   % and a label for \ref{} commands later in the document
+    \KwIn{signature tracelets $T^s$, candidate target function tracelets $T^t$}
+    \KwOut{similarity matrix $M$}
+\begin{spacing}{1}
+
+	$i \leftarrow 0$\;	
+	$s_i \leftarrow 0$ \tcp*{tracelet similarity in current iteration}	
+	$s_{i-1} \leftarrow 0$ \tcp*{tracelet similarity in previous iteration}	
+    $s^\bigtriangleup_i \leftarrow 0$ \tcp*{similarity different between last two iterations}
+    Matrix$\langle t^s,t^t, s\rangle ~M~ \leftarrow \varnothing$\;
+   \tcc{search through signature tracelets, starting from $k=1,2,...$}   
+    \For{$t^s_i~\in~T^s$}{ \label{algo:algo3_start}
+    	$j \leftarrow 0$\;
+		$s_j \leftarrow 0$\;
+		$s_{j-1} \leftarrow 0$\;  
+    	$s^\bigtriangleup_j \leftarrow 0$\;
+    	\tcc{for each signature tracelet, search through target tracelets}  
+    	\For{$t^t_j~\in~T^t$}{ \label{algo:algo3_target}
+    		$s_j =$ \textsf{TraceletSimilarity($t^s_i,t^t_j$)}\;
+    		$s^\bigtriangleup_j ~=~s_j-s_{j-1}$\; 
+    		\tcc{if previous iteration is better than current, leave}
+    		\eIf{$s^\bigtriangleup_j ~<~ 0$}{ \label{algo:algo3_opt1}
+            	$break$\;
+        	}
+        	{
+	        	$s_{j-1} ~=~ s_j$\;
+	   	    	$M \leftarrow \langle t^s_i,t^t_j, s_j\rangle$ \tcp*{update the matrix for a given $t^s_i$}
+	       	}
+        	$j~=~j+1$\;
+    	}
+    $s_i =$ \textsf{MaximumSimilarity($M[t^s_i]$)}\;
+    $s^\bigtriangleup_i ~=~s_i-s_{i-1}$\; 
+   	\eIf{$s^\bigtriangleup_i ~<~ 0$}{ \label{algo:algo3_opt2}
+        $break$\;
+     }{
+	   	$s_{i-1} ~=~ s_i$\;
+	    %$M \leftarrow \langle t^s_i,t^t_j, s_j\rangle $\;
+     }
+     $i~=~i+1$\;
+ }
+    \KwRet{$M$} \tcp*{similarity matrix is returned} \label{algo:algo3_ret}
+\end{spacing}
+\end{algorithm}
+
+
+

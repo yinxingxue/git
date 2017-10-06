@@ -1,0 +1,8 @@
+\section{Conclusion} \label{sec:concl}
+
+In this work, we present the scalable solution of binary code search framework, \toolNew, which aims to search similar binary code regardless of the differences in architecture, OS and compilation options. Rather than only relying on low-level semantic features in \tool, we further incorporate high-level semantic features and structural features in \toolNew. To speed up low-level feature extraction, we adopt emulation in \toolNew. %, and the used compilation options.
+%At modelling aspect, \tool leverages on the complete function semantics and length variant partial trace based function models to perform the similarity search. %Technically, first, we propose an approach to extract idiom, the recurring $n$-gram models of binary code, and classify them into three types for different applications. Second, in function matching, we propose a flexible matching strategy which do not use a fixed length of partial trace of the function.
+%This address the limitation of the fixed length of 3-tracelet used in \textsc{\small Tracy}.
+\xyx{The promising experimental results live up to the expectation of effective and efficient cross-architecture, cross-OS and cross-compiler binary code search.}
+Further, \toolNew has outperformed the state-of-the-art tools like \textsc{\small Tracy} and \textsc{\small BinDiff}, and also significantly improved the previous version of our tool (i.e., \tool). In security application, we also discovered a zero-day vulnerability in Adobe PDF Reader. In future, we are planning to apply \toolNew on matching open-source software bugs to the commercial software's binaries, in order to reveal more unknown vulnerabilities due to the  forking of common open-source software.
+

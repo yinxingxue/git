@@ -1,0 +1,119 @@
+This is BibTeX, Version 0.99dThe top-level auxiliary file: TSE_Bingo.aux
+The style file: ieeetran.bst
+Database file #1: srj-bibliography.bib
+You're missing a field name---line 293 of file srj-bibliography.bib
+ : 
+ : %  title={Tracelet-based code search in executables},
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+You're missing a field name---line 742 of file srj-bibliography.bib
+ : 
+ : %  author    = {Manuel Egele and
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+Repeated entry---line 1041 of file srj-bibliography.bib
+ : @inproceedings{DBLP:conf/msr/HemelKVD11
+ :                                        ,
+I'm skipping whatever remains of this entry
+You're missing a field name---line 1071 of file srj-bibliography.bib
+ :   
+ :   %url       = {http://doi.acm.org/10.1145/2568225.2568286},
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+You're missing a field name---line 1206 of file srj-bibliography.bib
+ :   
+ :   %crossref  = {DBLP:conf/issta/2016},
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+A bad cross reference---entry "DBLP:conf/msr/HemelKVD11"
+refers to entry "DBLP:conf/msr/2011", which doesn't exist
+A bad cross reference---entry "DBLP:conf/sp/PewnyGGRH15"
+refers to entry "DBLP:conf/sp/2015", which doesn't exist
+A bad cross reference---entry "DBLP:conf/pldi/DavidY14"
+refers to entry "DBLP:conf/pldi/2014", which doesn't exist
+A bad cross reference---entry "DBLP:conf/icse/JiangMSG07"
+refers to entry "DBLP:conf/icse/2007", which doesn't exist
+A bad cross reference---entry "DBLP:conf/qsic/ChanC14"
+refers to entry "DBLP:conf/qsic/2014", which doesn't exist
+A bad cross reference---entry "DBLP:conf/icse/GabelJS08"
+refers to entry "DBLP:conf/icse/2008", which doesn't exist
+A bad cross reference---entry "DBLP:conf/issta/JiangS09"
+refers to entry "DBLP:conf/issta/2009", which doesn't exist
+A bad cross reference---entry "DBLP:conf/asplos/Schkufza0A13"
+refers to entry "DBLP:conf/asplos/2013", which doesn't exist
+A bad cross reference---entry "DBLP:conf/icse/JhiWJZLW11"
+refers to entry "DBLP:conf/icse/2011", which doesn't exist
+A bad cross reference---entry "DBLP:conf/pldi/DavidPY16"
+refers to entry "DBLP:conf/pldi/2016", which doesn't exist
+A bad cross reference---entry "DBLP:conf/dimva/Flake04"
+refers to entry "DBLP:conf/dimva/2004", which doesn't exist
+A bad cross reference---entry "DBLP:conf/issta/CanaliLBKCK12"
+refers to entry "DBLP:conf/issta/2012", which doesn't exist
+A bad cross reference---entry "DBLP:conf/icse/ChenLZ14"
+refers to entry "DBLP:conf/icse/2014", which doesn't exist
+A bad cross reference---entry "DBLP:conf/uss/JangWB13"
+refers to entry "DBLP:conf/uss/2013", which doesn't exist
+A bad cross reference---entry "DBLP:conf/raid/KrugelKMRV05"
+refers to entry "DBLP:conf/raid/2005", which doesn't exist
+A bad cross reference---entry "3d-cfg"
+refers to entry "DBLP:conf/icse/2014", which doesn't exist
+A bad cross reference---entry "DBLP:conf/issta/MengXXLZN16"
+refers to entry "DBLP:conf/issta/2016", which doesn't exist
+A bad cross reference---entry "DBLP:conf/ecoop/ZhongXZPM09"
+refers to entry "DBLP:conf/ecoop/2009", which doesn't exist
+A bad cross reference---entry "DBLP:conf/issta/MengM16"
+refers to entry "DBLP:conf/issta/2016", which doesn't exist
+A bad cross reference---entry "DBLP:conf/icse/KimJKY11"
+refers to entry "DBLP:conf/icse/2011", which doesn't exist
+A bad cross reference---entry "DBLP:conf/sigsoft/ZhangG05"
+refers to entry "DBLP:conf/sigsoft/2005", which doesn't exist
+A bad cross reference---entry "DBLP:conf/issta/ZhangJWLZ12"
+refers to entry "DBLP:conf/issta/2012", which doesn't exist
+A bad cross reference---entry "DBLP:conf/uss/KolbitschCKKZW09"
+refers to entry "DBLP:conf/uss/2009", which doesn't exist
+A bad cross reference---entry "DBLP:conf/wcre/HuZLG16"
+refers to entry "DBLP:conf/wcre/2016", which doesn't exist
+A bad cross reference---entry "DBLP:conf/icics/GaoRS08"
+refers to entry "DBLP:conf/icics/2008", which doesn't exist
+A bad cross reference---entry "DBLP:conf/popl/BourquinKR13"
+refers to entry "DBLP:conf/popl/2013pprew", which doesn't exist
+A bad cross reference---entry "DBLP:conf/ndss/ZaddachBFB14"
+refers to entry "DBLP:conf/ndss/2014", which doesn't exist
+A bad cross reference---entry "DBLP:conf/dimva/BruschiMM06"
+refers to entry "DBLP:conf/dimva/2006", which doesn't exist
+A bad cross reference---entry "DBLP:conf/esorics/RosenblumZM11"
+refers to entry "DBLP:conf/esorics/2011", which doesn't exist
+A bad cross reference---entry "DBLP:conf/paste/RosenblumMZ10"
+refers to entry "DBLP:conf/paste/2010", which doesn't exist
+Warning--I didn't find a database entry for "DBLP:conf/icse/2007"
+Warning--I didn't find a database entry for "DBLP:conf/uss/2013"
+Warning--I didn't find a database entry for "DBLP:conf/dimva/2006"
+Warning--I didn't find a database entry for "DBLP:conf/raid/2005"
+Warning--I didn't find a database entry for "DBLP:conf/esorics/2011"
+Warning--I didn't find a database entry for "DBLP:conf/paste/2010"
+Warning--I didn't find a database entry for "DBLP:conf/pldi/2014"
+Warning--I didn't find a database entry for "DBLP:conf/issta/2009"
+Warning--I didn't find a database entry for "DBLP:conf/asplos/2013"
+Warning--I didn't find a database entry for "DBLP:conf/icse/2011"
+Warning--I didn't find a database entry for "DBLP:conf/issta/2012"
+Warning--I didn't find a database entry for "DBLP:conf/sigsoft/2005"
+Warning--I didn't find a database entry for "DBLP:conf/dimva/2004"
+Warning--I didn't find a database entry for "DBLP:conf/icics/2008"
+Warning--I didn't find a database entry for "DBLP:conf/popl/2013pprew"
+Warning--I didn't find a database entry for "DBLP:conf/ndss/2014"
+Warning--I didn't find a database entry for "DBLP:conf/sp/2015"
+Warning--I didn't find a database entry for "DBLP:conf/icse/2008"
+Warning--I didn't find a database entry for "DBLP:conf/pldi/2016"
+Warning--I didn't find a database entry for "DBLP:conf/icse/2014"
+Warning--I didn't find a database entry for "DBLP:conf/msr/2011"
+Warning--I didn't find a database entry for "DBLP:conf/qsic/2014"
+Warning--I didn't find a database entry for "DBLP:conf/ecoop/2009"
+Warning--I didn't find a database entry for "DBLP:conf/issta/2016"
+Warning--I didn't find a database entry for "DBLP:conf/wcre/2016"
+Warning--I didn't find a database entry for "DBLP:conf/uss/2009"
+-- IEEEtran.bst version 1.14 (2015/08/26) by Michael Shell.
+-- http://www.michaelshell.org/tex/ieeetran/bibtex/
+-- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
+
+Done.
+(There were 35 error messages)
